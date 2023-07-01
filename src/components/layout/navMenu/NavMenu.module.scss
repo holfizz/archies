@@ -1,0 +1,120 @@
+.NavMenu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 400px;
+  height: 100%;
+  background: #fff;
+  border: 2px solid #dcdada;
+  display: flex;
+}
+
+button {
+  svg {
+    transform: scale(1.5);
+  }
+}
+
+.navBar {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100vh;
+  background: #fff;
+  border: 2px solid #dcdada;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.navBlock {
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.navButton {
+  width: 100px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navButton.active {
+  justify-content: center;
+}
+
+.navButtonActive {
+  width: 3px;
+  height: 50px;
+  background: #365EFF;
+  animation: showNavButtonActive 0.5s 1;
+  position: absolute;
+  left: 0;
+}
+
+@keyframes showNavButtonActive {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.profileButton {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #365EFF;
+  border-radius: 15px;
+  transition: all 0.3s;
+  border: 2px solid #365EFF;
+
+  button {
+    svg {
+      fill: white;
+      transform: scale(1.5);
+    }
+  }
+}
+
+.profileButton:hover {
+  background: #fff;
+  border: 2px solid #365EFF;
+  transition: all 0.3s;
+
+  button {
+    svg {
+      fill: #365EFF;
+    }
+  }
+}
+
+.buttonLogout {
+  svg {
+    fill: #fff;
+  }
+
+  transition: all .3s;
+}
+
+.buttonLogout:hover {
+  svg {
+    fill: #365EFF;
+  }
+
+  transition: all .3s;
+}
+
+.navMenu {
+  width: 300px;
+}
+

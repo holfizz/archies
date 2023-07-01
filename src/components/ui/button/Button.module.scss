@@ -1,0 +1,38 @@
+.button {
+  color: white;
+  width: 100%;
+  height: 50px;
+  border-radius: 10px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.primary-dark {
+  border: 1px solid #365EFF;
+  color: #365EFF;
+}
+
+.primary-light {
+  border: 1px solid #fff;
+  color: #fff;
+}
+
+.clear {
+  color: #0D1D35;
+  border: 1px solid #ffffff;
+}
+
+.dashed-dark {
+  border: 3px dashed #365EFF;
+  color: #365EFF;
+  fill: #365EFF;
+}
+
+.dashed-light {
+  border: 3px dashed #fff;
+  color: #fff;
+  fill: #fff;
+}

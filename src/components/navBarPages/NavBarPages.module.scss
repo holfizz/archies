@@ -1,0 +1,25 @@
+.NavBarPages {
+  width: auto;
+  min-width: 300px;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.projectCardButton {
+  position: relative;
+  margin-top: auto;
+  bottom: 40px;
+}
+
+.modalButton {
+  margin: 20px 0;
+}
+
+.NavBarPagesTitle {
+  color: #0D1D35;
+}

@@ -1,0 +1,10 @@
+.kanbanDesk {
+  position: absolute;
+  left: 400px;
+  top: 105px;
+  width: -webkit-fill-available;
+  overflow-x: scroll;
+  height: -webkit-fill-available;
+  display: flex;
+  background: gray;
+}
