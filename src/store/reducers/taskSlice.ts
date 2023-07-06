@@ -1,0 +1,34 @@
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+
+export interface TaskSliceProps {
+    title: string;
+    description: string;
+    status: string;
+}
+
+export interface TaskState {
+    tasks: TaskSliceProps[];
+}
+
+const initialState: TaskState = {
+    tasks: JSON.parse(localStorage.getItem('tasks') || '[]'),
+};
+
+export const taskSlice = createSlice({
+    name: 'task',
+    initialState,
+    reducers: {
+        addTask: (state, action: PayloadAction<TaskSliceProps>) => {
+            state.tasks.push(action.payload);
+            localStorage.setItem('tasks', JSON.stringify(state.tasks));
+        },
+        deleteTask: (state, action: PayloadAction<TaskSliceProps>) => {
+            state.tasks = state.tasks.filter(task => task.title !== action.payload.title);
+            localStorage.setItem('tasks', JSON.stringify(state.tasks));
+        }
+    },
+});
+
+export const {addTask, deleteTask} = taskSlice.actions;
+
+export default taskSlice.reducer;

@@ -1,10 +1,17 @@
 .kanbanDesk {
   position: absolute;
   left: 400px;
-  top: 105px;
+  top: 100px;
   width: -webkit-fill-available;
-  overflow-x: scroll;
+  overflow: auto;
   height: -webkit-fill-available;
   display: flex;
-  background: gray;
+  background: #f5f4f4;
+  flex-direction: column;
+}
+
+.desk {
+  display: flex;
+  position: relative;
+  top: 50px;
 }

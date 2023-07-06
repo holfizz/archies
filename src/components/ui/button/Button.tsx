@@ -6,14 +6,15 @@ export enum ButtonStyle {
     PRIMARY_DARK = 'primary-dark',
     PRIMARY_LIGHT = 'primary-light',
     DASHED_DARK = 'dashed-dark',
-    DASHED_LIGHT = 'dashed-light'
+    DASHED_LIGHT = 'dashed-light',
+    FILL = 'fill'
 }
 
 interface ButtonInterface {
     children?: ReactNode;
     onClick?: () => void;
     buttonStyle: ButtonStyle;
-    className?: string;
+    className?: string | string[];
 }
 
 const Button: FC<ButtonInterface> = ({children, onClick, buttonStyle, className}) => {

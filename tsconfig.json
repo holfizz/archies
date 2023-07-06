@@ -6,6 +6,13 @@
       "dom.iterable",
       "esnext"
     ],
+    "types": [
+      "node",
+      "react",
+      "react-dom",
+      "react-beautiful-dnd",
+      "uuid"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

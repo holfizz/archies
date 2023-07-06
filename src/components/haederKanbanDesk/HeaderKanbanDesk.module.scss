@@ -1,0 +1,175 @@
+.headerKanbanDesk {
+  height: 200px;
+  width: -webkit-fill-available;
+  border: 2px solid #dcdada;
+  background: #fff;
+  display: flex;
+}
+
+.dataBlock {
+  width: 700px;
+  height: 100px;
+  position: relative;
+  top: 30px;
+  left: 50px;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.storageBlocks {
+  display: flex;
+  align-items: center;
+  position: absolute;
+
+}
+
+.data {
+  width: 60px;
+  height: 60px;
+  border-radius: 20px;
+  background: #d1e9fd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 20px 0 0;
+
+
+  svg {
+    fill: #fff;
+    transform: scale(2);
+  }
+
+}
+
+.dataBlockTitle {
+  font-size: 16px;
+  line-height: 1.2;
+  position: relative;
+  top: -15px;
+}
+
+.storageFill {
+  width: 400px;
+  height: 5px;
+  display: flex;
+  justify-content: center;
+  border-radius: 3px;
+  flex-wrap: nowrap;
+  align-items: start;
+  flex-direction: row-reverse;
+  position: relative;
+  left: 80px;
+  top: 15px;
+}
+
+.storageFree {
+  width: 100%;
+  height: 100%;
+  background: #9d9d9d;
+  position: relative;
+  left: 0;
+}
+
+.storageFilled {
+  width: 26%;
+  height: 100%;
+  background: #365EFF;
+}
+
+.titleComplete {
+  position: relative;
+  top: 13px;
+  font-size: 16px;
+  left: 90px;
+}
+
+.buttonSelectionMode {
+}
+
+.buttonSelectionMode.active {
+  border-bottom: 2px solid #365EFF;
+}
+
+.selectionModeBlock {
+  width: max-content;
+  display: flex;
+  position: relative;
+  bottom: 0;
+  top: 48px;
+}
+
+.activeButtonSelectionMode {
+  width: auto;
+  height: 3px;
+  background: #365EFF;
+}
+
+.blockSelectionModeButton {
+  width: auto;
+  height: 50px;
+  align-items: center;
+  z-index: 10000000;
+}
+
+.users {
+  display: flex;
+  flex-wrap: nowrap;
+  height: 100px;
+  align-items: center;
+  justify-content: center;
+  width: 130px;
+}
+
+.user {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #9d9d9d;
+  border: 2px solid #fff;
+  position: relative;
+}
+
+.user_two {
+  left: -15px;
+}
+
+.user_three {
+  left: -30px;
+}
+
+.user_four {
+  left: -45px;
+}
+
+.membersControllers {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+
+}
+
+.typeKanbanController {
+  display: flex;
+}
+
+.controller {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right: 30px;
+}
+
+.typeControllerButton {
+  width: 100px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  border-radius: 5px;
+}
+
+.typeControllerButton.active {
+  background: rgba(97, 125, 255, 0.5);
+  color: #365EFF;
+}

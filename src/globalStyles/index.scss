@@ -6,7 +6,7 @@ body {
   background: #fff;
   font-family: 'Roboto Mono', monospace;
   color: #0D1D35;
-  
+
 }
 
 button, a, input, li {
@@ -24,6 +24,6 @@ button, a, input, li {
   list-style: none;
 }
 
-button:hover, a:hover, input:hover, li:hover {
+button:hover, a:hover, input:hover, li:hover, svg:hover {
   cursor: pointer;
 }

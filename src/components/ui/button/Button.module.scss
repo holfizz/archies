@@ -1,6 +1,7 @@
 .button {
   color: white;
   width: 100%;
+  min-height: 50px;
   height: 50px;
   border-radius: 10px;
   padding: 0 20px;
@@ -8,21 +9,26 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+  font-weight: 700;
+  transition: all 0.5s;
 }
 
 .primary-dark {
-  border: 1px solid #365EFF;
   color: #365EFF;
+  background: #fff;
 }
 
 .primary-light {
-  border: 1px solid #fff;
   color: #fff;
+  background: #365EFF;
+  border: 1px solid #fff;
 }
 
 .clear {
   color: #0D1D35;
-  border: 1px solid #ffffff;
+  margin: 0;
+  width: auto;
+  height: auto;
 }
 
 .dashed-dark {

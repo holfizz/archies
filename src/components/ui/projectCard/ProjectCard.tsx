@@ -1,16 +1,17 @@
 import React, {FC} from "react";
+import cls from './ProjectCard.module.scss'
 
 interface Project {
     title: string;
 }
 
 interface ProjectsProps {
-    projects: Project[];
+    projects?: Project[];
 }
 
 const ProjectCard: FC<ProjectsProps> = ({projects}) => {
     return (
-        <div>
+        <div className={cls.card}>
             {/*{projects.map((item: Project, index: number) => (*/}
             {/*    <div className={cls.projectCard}>*/}
             {/*        <h3 key={index}>*/}
@@ -19,7 +20,6 @@ const ProjectCard: FC<ProjectsProps> = ({projects}) => {
             {/*    </div>*/}
 
             {/*))}*/}
-            piper enterprise
         </div>
     )
 }
