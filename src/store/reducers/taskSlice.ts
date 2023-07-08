@@ -25,10 +25,15 @@ export const taskSlice = createSlice({
         deleteTask: (state, action: PayloadAction<TaskSliceProps>) => {
             state.tasks = state.tasks.filter(task => task.title !== action.payload.title);
             localStorage.setItem('tasks', JSON.stringify(state.tasks));
-        }
+        },
+        setTasks: (state, action: PayloadAction<TaskSliceProps[]>) => {
+            state.tasks = action.payload;
+            console.log('New tasks:', state.tasks); // Add console log here
+            localStorage.setItem('tasks', JSON.stringify(state.tasks));
+        },
     },
 });
 
-export const {addTask, deleteTask} = taskSlice.actions;
+export const {addTask, deleteTask, setTasks} = taskSlice.actions;
 
 export default taskSlice.reducer;

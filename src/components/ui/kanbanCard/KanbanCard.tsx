@@ -4,14 +4,12 @@ import {PiListChecksBold,} from "react-icons/pi";
 import {BsChatSquareDots, BsThreeDotsVertical,} from "react-icons/bs";
 import {AiOutlineEye} from "react-icons/ai";
 import {FiPaperclip} from "react-icons/fi";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../../store/reducers";
+import {useDispatch} from "react-redux";
 import {GrFormClose} from "react-icons/gr";
 import Button, {ButtonStyle} from "../button/Button";
-import {deleteTask} from "../../../store/reducers/taskSlice";
 import {Draggable} from "react-beautiful-dnd";
 
-interface card {
+interface task {
     title: string;
     description: string;
     status: string;
@@ -19,14 +17,16 @@ interface card {
 
 interface KanbanCardProps {
     status: string;
+    tasks: task[];
+    onDeleteTask: (task: task) => void
 }
 
-const KanbanCard: FC<KanbanCardProps> = ({status}) => {
+const KanbanCard: FC<KanbanCardProps> = ({status, tasks, onDeleteTask}) => {
     const dispatch = useDispatch()
-    const tasksDefault = useSelector(
-        (state: RootState) => state.task.tasks
-    );
-    const filteredTasks = tasksDefault.filter((card: card) =>
+    // const tasksDefault = useSelector(
+    //     (state: RootState) => state.task.tasks
+    // )
+    const filteredTasks = tasks.filter((card: task) =>
         status ? card.status === status : true
     );
 
@@ -48,7 +48,7 @@ const KanbanCard: FC<KanbanCardProps> = ({status}) => {
     const [drag, setDrag] = useState<boolean>(false)
     return (
         <div className={drag && cls.drag}>
-            {filteredTasks.map((item: card, index: number) => {
+            {filteredTasks.map((item: task, index: number) => {
                 return (
                     <Draggable draggableId={item.title} index={index}>
                         {(provided, snapshot, rubric) => (
@@ -122,7 +122,7 @@ const KanbanCard: FC<KanbanCardProps> = ({status}) => {
                                                 <div className={cls.modalBody}>
                                                     <Button onClick={() => {
                                                         closeModal(index)
-                                                        dispatch(deleteTask(item))
+                                                        onDeleteTask(item)
                                                     }} buttonStyle={ButtonStyle.CLEAR}
                                                             className={cls.buttonDelete}
                                                     >Delete</Button>
