@@ -1,45 +1,43 @@
-import React, {FC} from "react";
+import React, {FC, useState} from "react";
 import cls from './KanbanDesk.module.scss'
 import HeaderKanbanDesk from "../haederKanbanDesk/HeaderKanbanDesk";
 import KanbanColumn, {kanbanColumnsVar} from "../ui/kanbanColumn/KanbanColumn";
+import {TaskSliceProps} from "../../store/reducers/taskSlice";
 // import KanbanColumn, {kanbanColumnsVar} from "../ui/kanbanColumn/KanbanColumn";
 
 const KanbanDesk: FC = () => {
+    const [tasks, setTasks] = useState<TaskSliceProps[]>([]);
     return (
         <div className={cls.kanbanDesk}>
             <HeaderKanbanDesk></HeaderKanbanDesk>
             <div className={cls.desk}>
                 <KanbanColumn
-                    statusColumn={'todo'}
-                    titleColumn={'To Do'}
+                    statusColumn={"todo"}
+                    titleColumn={"To Do"}
                     kanbanVar={kanbanColumnsVar.TODO}
                     className={cls.toDoBlock}
-                >
-                </KanbanColumn>
+                ></KanbanColumn>
 
                 <KanbanColumn
-                    statusColumn={'progress'}
-                    titleColumn={'In Progress'}
+                    statusColumn={"progress"}
+                    titleColumn={"In Progress"}
                     kanbanVar={kanbanColumnsVar.PROGRESS}
-                    className={cls.inProgressBlock}>
-
-                </KanbanColumn>
+                    className={cls.inProgressBlock}
+                ></KanbanColumn>
 
                 <KanbanColumn
-                    statusColumn={'review'}
-                    titleColumn={'Need Review'}
+                    statusColumn={"review"}
+                    titleColumn={"Need Review"}
                     kanbanVar={kanbanColumnsVar.REVIEW}
                     className={cls.needReviewBlock}
-                >
-                </KanbanColumn>
+                ></KanbanColumn>
 
                 <KanbanColumn
-                    statusColumn={'done'}
-                    titleColumn={'Done'}
+                    statusColumn={"done"}
+                    titleColumn={"Done"}
                     kanbanVar={kanbanColumnsVar.DONE}
                     className={cls.doneBlock}
-                >
-                </KanbanColumn>
+                ></KanbanColumn>
             </div>
         </div>
     )

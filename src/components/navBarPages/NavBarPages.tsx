@@ -1,7 +1,7 @@
 import React, {FC, ReactNode, useState} from "react";
 import cls from "./NavBarPages.module.scss";
 import {BsPlus} from "react-icons/bs";
-import Modal from "../ui/modal/Modal";
+import Modal from "../ui/modals/Modal";
 import Input, {InputStyle} from "../ui/input/Input";
 import Button, {ButtonStyle} from "../ui/button/Button";
 
