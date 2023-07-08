@@ -28,7 +28,6 @@ export const taskSlice = createSlice({
         },
         setTasks: (state, action: PayloadAction<TaskSliceProps[]>) => {
             state.tasks = action.payload;
-            console.log('New tasks:', state.tasks); // Add console log here
             localStorage.setItem('tasks', JSON.stringify(state.tasks));
         },
     },

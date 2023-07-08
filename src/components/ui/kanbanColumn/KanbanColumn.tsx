@@ -42,15 +42,27 @@ const KanbanColumn: FC<kanbanInterface> = ({className, kanbanVar, titleColumn, s
         setTitle(value);
     };
 
-    const handleOnDragEnd = (result: DropResult) => {
-        console.log(tasks)
+    const handleOnDragEnd = (result: DropResult, status: string) => {
         if (!result.destination) return;
-        const newTasks = Array.from(tasksUpdate);
-        const [removed] = newTasks.splice(result.source.index, 1);
-        newTasks.splice(result.destination.index, 0, removed);
+        const {source, destination} = result;
+
+        // Отфильтровываем только элементы с нужным статусом
+        const filteredTasks = tasksUpdate.filter(task => task.status === status);
+
+        const [removed] = filteredTasks.splice(source.index, 1);
+        filteredTasks.splice(destination.index, 0, removed);
+
+        // Обновляем состояние задач с новым массивом, содержащим отфильтрованные элементы
+        const newTasks = tasksUpdate.map(task => {
+            if (task.status === status) {
+                return filteredTasks.shift() || task;
+            } else {
+                return task;
+            }
+        });
+
         dispatch(setTasks(newTasks));
-        setTasksUpdate(newTasks)
-        console.log(tasks)
+        setTasksUpdate(newTasks);
     };
     const handleDeleteTask = (task: TaskSliceProps) => {
         dispatch(deleteTask(task));
@@ -60,9 +72,9 @@ const KanbanColumn: FC<kanbanInterface> = ({className, kanbanVar, titleColumn, s
         });
     };
     return (
-        <DragDropContext onDragEnd={handleOnDragEnd}>
+        <DragDropContext onDragEnd={(result: DropResult) => handleOnDragEnd(result, statusColumn)}>
             <Droppable droppableId={statusColumn} key={statusColumn}>
-                {(provided, snapshot) => (
+                {(provided) => (
                     <div
                         {...provided.droppableProps}
                         ref={provided.innerRef}

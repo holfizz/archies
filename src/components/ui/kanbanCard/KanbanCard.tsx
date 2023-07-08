@@ -1,13 +1,13 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import cls from "./KanbantCard.module.scss";
 import {PiListChecksBold,} from "react-icons/pi";
 import {BsChatSquareDots, BsThreeDotsVertical,} from "react-icons/bs";
 import {AiOutlineEye} from "react-icons/ai";
 import {FiPaperclip} from "react-icons/fi";
-import {useDispatch} from "react-redux";
 import {GrFormClose} from "react-icons/gr";
 import Button, {ButtonStyle} from "../button/Button";
 import {Draggable} from "react-beautiful-dnd";
+import {TaskSliceProps} from "../../../store/reducers/taskSlice";
 
 interface task {
     title: string;
@@ -22,13 +22,13 @@ interface KanbanCardProps {
 }
 
 const KanbanCard: FC<KanbanCardProps> = ({status, tasks, onDeleteTask}) => {
-    const dispatch = useDispatch()
-    // const tasksDefault = useSelector(
-    //     (state: RootState) => state.task.tasks
-    // )
-    const filteredTasks = tasks.filter((card: task) =>
-        status ? card.status === status : true
-    );
+    const [filteredTasks, setFilteredTasks] = useState<task[]>([])
+    useEffect(() => {
+        const newFilteredTasks = tasks.filter((card: TaskSliceProps) => {
+            return status ? card.status === status : true;
+        });
+        setFilteredTasks(newFilteredTasks);
+    }, [tasks, status]);
 
     const [modalStates, setModalStates] = useState(
         filteredTasks.map((_) => false)
@@ -45,39 +45,23 @@ const KanbanCard: FC<KanbanCardProps> = ({status, tasks, onDeleteTask}) => {
             prev.map((state, i) => (i === index ? false : state))
         );
     };
-    const [drag, setDrag] = useState<boolean>(false)
     return (
-        <div className={drag && cls.drag}>
+        <div>
             {filteredTasks.map((item: task, index: number) => {
                 return (
-                    <Draggable draggableId={item.title} index={index}>
-                        {(provided, snapshot, rubric) => (
+                    <Draggable draggableId={(index + 1).toString()} index={index}>
+                        {(provided) => (
                             <div key={index}
-                                 onDragStart={() => {
-                                     console.log(1)
-                                     setDrag(true)
-                                 }}
-                                 onDragOver={() => {
-                                     setDrag(false)
-                                     console.log(2)
-                                 }}
+                                 draggable={true}
                                  {...provided.draggableProps}
                                  {...provided.dragHandleProps}
                                  ref={provided.innerRef}
                             >
                                 <div
-                                    onDragStart={() => {
-                                        console.log(1)
-                                        setDrag(true)
-                                    }}
-                                    onDragOver={() => {
-                                        setDrag(false)
-                                        console.log(2)
-                                    }}
-                                    className={[cls.card].join(' ')}>
+                                    className={cls.card}>
                                     <div className={cls.cardCategoryTitle}>
                                         <div className={cls.category}>UX stages</div>
-                                        <div onClick={() => openModal(index)}>
+                                        <div className={cls.deleteTask} onClick={() => openModal(index)}>
                                             <BsThreeDotsVertical/>
                                         </div>
                                     </div>
@@ -112,24 +96,28 @@ const KanbanCard: FC<KanbanCardProps> = ({status, tasks, onDeleteTask}) => {
                                     {modalStates[index] && (
                                         <div className={cls.modal}>
                                             <div className={cls.modalContent}>
-                                                <div className={cls.closeModal}
-                                                     onClick={() => {
-                                                         closeModal(index)
-                                                     }}
+                                                <div
+                                                    className={cls.closeModal}
+                                                    onClick={() => closeModal(index)}
                                                 >
                                                     <GrFormClose/>
                                                 </div>
                                                 <div className={cls.modalBody}>
-                                                    <Button onClick={() => {
-                                                        closeModal(index)
-                                                        onDeleteTask(item)
-                                                    }} buttonStyle={ButtonStyle.CLEAR}
-                                                            className={cls.buttonDelete}
-                                                    >Delete</Button>
+                                                    <Button
+                                                        onClick={() => {
+                                                            closeModal(index);
+                                                            onDeleteTask(item);
+                                                        }}
+                                                        buttonStyle={ButtonStyle.CLEAR}
+                                                        className={cls.buttonDelete}
+                                                    >
+                                                        Delete
+                                                    </Button>
                                                 </div>
                                             </div>
                                         </div>
                                     )}
+
 
                                 </div>
                             </div>)}
