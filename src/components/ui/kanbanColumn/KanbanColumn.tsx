@@ -6,7 +6,7 @@ import KanbanCard from "../kanbanCard/KanbanCard";
 import {useDispatch, useSelector} from "react-redux";
 import Modal from "../modals/Modal";
 import Input, {InputStyle} from "../input/Input";
-import {addTask, setTasks} from "../../../store/reducers/taskSlice";
+import {addTask, deleteTask, setTasks, TaskSliceProps} from "../../../store/reducers/taskSlice";
 import {DragDropContext, Droppable, DropResult} from "react-beautiful-dnd";
 import {RootState} from "../../../store/reducers";
 
@@ -29,21 +29,35 @@ const KanbanColumn: FC<kanbanInterface> = ({className, kanbanVar, titleColumn, s
     const [visible, setVisible] = useState<boolean>(false)
     const [title, setTitle] = useState<string>('')
     const [description, setDescription] = useState<string>('')
+
+    const tasks = useSelector((state: RootState) => state.task.tasks)
+    const [tasksUpdate, setTasksUpdate] = useState<TaskSliceProps[]>(tasks)
+
     const dispatch = useDispatch()
+
     const handleDescriptionChange = (value: string) => {
         setDescription(value);
     };
     const handleTitleChange = (value: string) => {
         setTitle(value);
     };
-    const tasks = useSelector((state: RootState) => state.task.tasks)
 
     const handleOnDragEnd = (result: DropResult) => {
+        console.log(tasks)
         if (!result.destination) return;
-        const newTasks = Array.from(tasks);
+        const newTasks = Array.from(tasksUpdate);
         const [removed] = newTasks.splice(result.source.index, 1);
         newTasks.splice(result.destination.index, 0, removed);
         dispatch(setTasks(newTasks));
+        setTasksUpdate(newTasks)
+        console.log(tasks)
+    };
+    const handleDeleteTask = (task: TaskSliceProps) => {
+        dispatch(deleteTask(task));
+        // @ts-ignore
+        setTasksUpdate((prevTasks: TaskSliceProps[]) => {
+            return prevTasks.filter((t: TaskSliceProps) => t.title !== task.title);
+        });
     };
     return (
         <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -65,7 +79,7 @@ const KanbanColumn: FC<kanbanInterface> = ({className, kanbanVar, titleColumn, s
                                 setVisible(true)
                             }} buttonStyle={ButtonStyle.PRIMARY_DARK}><BsPlus/>Add New Task</Button>
                             <div>{children}</div>
-                            <KanbanCard status={statusColumn}></KanbanCard>
+                            <KanbanCard tasks={tasks} status={statusColumn} onDeleteTask={handleDeleteTask}/>
                             {visible && <Modal visible={visible} setVisible={setVisible}>
                                 <Input className={cls.modalAddTask} onChange={handleTitleChange}
                                        inputStyle={InputStyle.PRIMARY}
@@ -81,6 +95,11 @@ const KanbanColumn: FC<kanbanInterface> = ({className, kanbanVar, titleColumn, s
                                                 description: description,
                                                 status: statusColumn
                                             }))
+                                            setTasksUpdate([...tasks, {
+                                                title: title,
+                                                description: description,
+                                                status: statusColumn
+                                            }])
                                             setDescription('')
                                             setTitle('')
                                             setVisible(false)
