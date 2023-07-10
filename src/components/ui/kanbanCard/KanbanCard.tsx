@@ -7,12 +7,12 @@ import {FiPaperclip} from "react-icons/fi";
 import {GrFormClose} from "react-icons/gr";
 import Button, {ButtonStyle} from "../button/Button";
 import {Draggable} from "react-beautiful-dnd";
-import {TaskSliceProps} from "../../../store/reducers/taskSlice";
 
-interface task {
+export interface task {
     title: string;
     description: string;
     status: string;
+    id: string
 }
 
 interface KanbanCardProps {
@@ -22,34 +22,25 @@ interface KanbanCardProps {
 }
 
 const KanbanCard: FC<KanbanCardProps> = ({status, tasks, onDeleteTask}) => {
-    const [filteredTasks, setFilteredTasks] = useState<task[]>([])
+    const [filteredTasks, setFilteredTasks] = useState<task[]>([]);
     useEffect(() => {
-        const newFilteredTasks = tasks.filter((card: TaskSliceProps) => {
+        const newFilteredTasks = tasks.filter((card: task) => {
             return status ? card.status === status : true;
         });
         setFilteredTasks(newFilteredTasks);
     }, [tasks, status]);
 
-    const [modalStates, setModalStates] = useState(
-        filteredTasks.map((_) => false)
-    );
+    const [openModalIndex, setOpenModalIndex] = useState<number | null>(null);
 
-    const openModal = (index: number) => {
-        setModalStates((prev) =>
-            prev.map((state, i) => (i === index ? true : state))
-        );
+    const handleModalToggle = (index: number) => {
+        setOpenModalIndex(openModalIndex === index ? null : index);
     };
 
-    const closeModal = (index: number) => {
-        setModalStates((prev) =>
-            prev.map((state, i) => (i === index ? false : state))
-        );
-    };
     return (
         <div>
             {filteredTasks.map((item: task, index: number) => {
                 return (
-                    <Draggable draggableId={(index + 1).toString()} index={index}>
+                    <Draggable key={index} draggableId={(index).toString()} index={index}>
                         {(provided) => (
                             <div key={index}
                                  draggable={true}
@@ -57,11 +48,12 @@ const KanbanCard: FC<KanbanCardProps> = ({status, tasks, onDeleteTask}) => {
                                  {...provided.dragHandleProps}
                                  ref={provided.innerRef}
                             >
-                                <div
-                                    className={cls.card}>
+                                <div className={cls.card}>
                                     <div className={cls.cardCategoryTitle}>
                                         <div className={cls.category}>UX stages</div>
-                                        <div className={cls.deleteTask} onClick={() => openModal(index)}>
+                                        <div className={cls.deleteTask} onClick={() => {
+                                            handleModalToggle(index);
+                                        }}>
                                             <BsThreeDotsVertical/>
                                         </div>
                                     </div>
@@ -93,19 +85,19 @@ const KanbanCard: FC<KanbanCardProps> = ({status, tasks, onDeleteTask}) => {
                                         </div>
                                     </div>
 
-                                    {modalStates[index] && (
+                                    {openModalIndex === index && (
                                         <div className={cls.modal}>
                                             <div className={cls.modalContent}>
                                                 <div
                                                     className={cls.closeModal}
-                                                    onClick={() => closeModal(index)}
+                                                    onClick={() => handleModalToggle(index)}
                                                 >
                                                     <GrFormClose/>
                                                 </div>
                                                 <div className={cls.modalBody}>
                                                     <Button
                                                         onClick={() => {
-                                                            closeModal(index);
+                                                            handleModalToggle(index);
                                                             onDeleteTask(item);
                                                         }}
                                                         buttonStyle={ButtonStyle.CLEAR}
@@ -117,16 +109,13 @@ const KanbanCard: FC<KanbanCardProps> = ({status, tasks, onDeleteTask}) => {
                                             </div>
                                         </div>
                                     )}
-
-
                                 </div>
-                            </div>)}
+                            </div>
+                        )}
                     </Draggable>
                 );
             })}
-
         </div>
     );
 };
-
-export default KanbanCard;
+export default KanbanCard
