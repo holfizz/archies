@@ -2,13 +2,13 @@ import {FC, ReactNode, useState} from "react";
 import cls from './KanbanColumn.module.scss'
 import {BsPlus, BsThreeDotsVertical} from "react-icons/bs";
 import Button, {ButtonStyle} from "../button/Button";
-import KanbanCard, {task} from "../kanbanCard/KanbanCard";
+import KanbanCard from "../kanbanCard/KanbanCard";
 import {useDispatch} from "react-redux";
 import Modal from "../modals/Modal";
 import Input, {InputStyle} from "../input/Input";
-import {addTask, deleteTask, TaskSliceProps} from "../../../store/reducers/taskSlice";
 import {Droppable} from "react-beautiful-dnd";
-import {v4 as uuidv4} from "uuid";
+import {addTask, deleteTask, TaskSliceProps} from "../../../store/reducers/taskSlice";
+import {v4 as uuidv4} from 'uuid';
 
 export enum kanbanColumnsVar {
     TODO = 'todo',
@@ -25,8 +25,6 @@ interface kanbanInterface {
     statusColumn: string
     setTasksUpdate: any
     taskUpdate: any[],
-    tasks: task[];
-
 }
 
 const KanbanColumn: FC<kanbanInterface> = ({
@@ -37,7 +35,6 @@ const KanbanColumn: FC<kanbanInterface> = ({
                                                children,
                                                setTasksUpdate,
                                                taskUpdate,
-                                               tasks
                                            }) => {
     const [visible, setVisible] = useState<boolean>(false)
     const [title, setTitle] = useState<string>('')
@@ -52,14 +49,32 @@ const KanbanColumn: FC<kanbanInterface> = ({
     const handleTitleChange = (value: string) => {
         setTitle(value);
     };
-
-
-    const handleDeleteTask = (task: TaskSliceProps) => {
-        dispatch(deleteTask(task));
-        setTasksUpdate((prevTasks: TaskSliceProps[]) => {
-            return prevTasks.filter((t: TaskSliceProps) => t.id !== task.id);
-        });
+    const handleDeleteTask = (task: TaskSliceProps, status: string, taskId: string) => {
+        dispatch(deleteTask({boardId: status, taskId: taskId}));
+        setTasksUpdate((prevTasks: TaskSliceProps[]) =>
+            prevTasks.filter((t: TaskSliceProps) => t.id !== task.id)
+        );
     };
+
+    function handleAddTask(title: string, description: string, statusColumn: string, taskUpdate: TaskSliceProps[]) {
+        const tasksWithSameStatus = taskUpdate.filter(task => task.status === statusColumn);
+        const newTask: TaskSliceProps = {
+            id: uuidv4(),
+            title: title,
+            description: description,
+            status: statusColumn,
+            order: tasksWithSameStatus.length,
+        };
+
+        dispatch(addTask({
+            boardId: statusColumn,
+            task: newTask,
+        }));
+
+        const updatedTasks = [...taskUpdate, newTask];
+        setTasksUpdate(updatedTasks);
+    }
+
     return (
         <Droppable droppableId={statusColumn} key={statusColumn}>
             {(provided) => (
@@ -90,17 +105,7 @@ const KanbanColumn: FC<kanbanInterface> = ({
                                    placeholder={'Description Task'} type={'text'}></Input>
                             <Button className={cls.modalAddTask} buttonStyle={ButtonStyle.PRIMARY_LIGHT}
                                     onClick={() => {
-                                        dispatch(addTask({
-                                            title: title,
-                                            description: description,
-                                            status: statusColumn
-                                        }))
-                                        setTasksUpdate([...tasks, {
-                                            id: uuidv4(),
-                                            title: title,
-                                            description: description,
-                                            status: statusColumn
-                                        }])
+                                        handleAddTask(title, description, statusColumn, taskUpdate)
                                         setDescription('')
                                         setTitle('')
                                         setVisible(false)

@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {FC, useState} from "react";
 import cls from "./KanbantCard.module.scss";
 import {PiListChecksBold,} from "react-icons/pi";
 import {BsChatSquareDots, BsThreeDotsVertical,} from "react-icons/bs";
@@ -7,29 +7,16 @@ import {FiPaperclip} from "react-icons/fi";
 import {GrFormClose} from "react-icons/gr";
 import Button, {ButtonStyle} from "../button/Button";
 import {Draggable} from "react-beautiful-dnd";
+import {TaskSliceProps} from "../../../store/reducers/taskSlice";
 
-export interface task {
-    title: string;
-    description: string;
-    status: string;
-    id: string
-}
 
 interface KanbanCardProps {
     status: string;
-    tasks: task[];
-    onDeleteTask: (task: task) => void
+    tasks: TaskSliceProps[];
+    onDeleteTask: (task: TaskSliceProps, status: string, taskId: string) => void
 }
 
 const KanbanCard: FC<KanbanCardProps> = ({status, tasks, onDeleteTask}) => {
-    const [filteredTasks, setFilteredTasks] = useState<task[]>([]);
-    useEffect(() => {
-        const newFilteredTasks = tasks.filter((card: task) => {
-            return status ? card.status === status : true;
-        });
-        setFilteredTasks(newFilteredTasks);
-    }, [tasks, status]);
-
     const [openModalIndex, setOpenModalIndex] = useState<number | null>(null);
 
     const handleModalToggle = (index: number) => {
@@ -38,7 +25,7 @@ const KanbanCard: FC<KanbanCardProps> = ({status, tasks, onDeleteTask}) => {
 
     return (
         <div>
-            {filteredTasks.map((item: task, index: number) => {
+            {tasks.map((item: TaskSliceProps, index: number) => {
                 return (
                     <Draggable key={index} draggableId={(index).toString()} index={index}>
                         {(provided) => (
@@ -98,7 +85,7 @@ const KanbanCard: FC<KanbanCardProps> = ({status, tasks, onDeleteTask}) => {
                                                     <Button
                                                         onClick={() => {
                                                             handleModalToggle(index);
-                                                            onDeleteTask(item);
+                                                            onDeleteTask(item, item.status, item.id);
                                                         }}
                                                         buttonStyle={ButtonStyle.CLEAR}
                                                         className={cls.buttonDelete}

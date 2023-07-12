@@ -1,40 +1,77 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {v4 as uuidv4} from 'uuid';
 
 export interface TaskSliceProps {
     id: string
     title: string;
     description: string;
     status: string;
+    order: number
 }
 
 export interface TaskState {
     tasks: TaskSliceProps[];
 }
 
-const initialState: TaskState = {
-    tasks: JSON.parse(localStorage.getItem('tasks') || '[]'),
-};
+export interface BoardSliceProps {
+    id: string;
+    name: string;
+    items: TaskSliceProps[];
+}
 
+export interface TaskBoardState {
+    boards: BoardSliceProps[];
+}
+
+const storedState = localStorage.getItem('boards' || '');
+const initialState: TaskBoardState = storedState ? {boards: [...JSON.parse(storedState)]} : {
+    boards: [
+        {
+            id: "1",
+            name: "todo",
+            items: []
+        },
+        {
+            id: "2",
+            name: "progress",
+            items: []
+        },
+        {
+            id: "3",
+            name: "review",
+            items: []
+        },
+        {
+            id: "4",
+            name: "done",
+            items: []
+        }
+    ],
+}
 export const taskSlice = createSlice({
     name: 'task',
     initialState,
     reducers: {
-        addTask: (state, action: PayloadAction<Omit<TaskSliceProps, 'id'>>) => {
-            const newTask = {
-                id: uuidv4().toString(),
-                ...action.payload,
-            };
-            state.tasks.push(newTask);
-            localStorage.setItem('tasks', JSON.stringify(state.tasks));
+        addTask: (state, action: PayloadAction<{ boardId: string, task: TaskSliceProps }>) => {
+            const board = state.boards.find(board => board.name === action.payload.boardId);
+            if (board) {
+                board.items.push(action.payload.task);
+                localStorage.setItem('boards', JSON.stringify(state.boards));
+            }
         },
-        deleteTask: (state, action: PayloadAction<{ id: string }>) => {
-            state.tasks = state.tasks.filter(task => task.id !== action.payload.id);
-            localStorage.setItem('tasks', JSON.stringify(state.tasks));
+        deleteTask: (state, action: PayloadAction<{ boardId: string, taskId: string }>) => {
+            const board = state.boards.find((board: BoardSliceProps) => board.name === action.payload.boardId);
+            if (board) {
+                board.items = board.items.filter((task: TaskSliceProps) => task.id !== action.payload.taskId);
+                console.log(board.items)
+                localStorage.setItem('boards', JSON.stringify(state.boards));
+            }
         },
-        setTasks: (state, action: PayloadAction<TaskSliceProps[]>) => {
-            state.tasks = action.payload;
-            localStorage.setItem('tasks', JSON.stringify(state.tasks));
+        setTasks: (state, action: PayloadAction<{ boardId: string, tasks: TaskSliceProps[] }>) => {
+            const board = state.boards.find(board => board.id === action.payload.boardId);
+            if (board) {
+                board.items = action.payload.tasks;
+                localStorage.setItem('boards', JSON.stringify(state.boards));
+            }
         },
     },
 });

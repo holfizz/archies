@@ -1,18 +1,24 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import cls from './KanbanDesk.module.scss'
 import HeaderKanbanDesk from "../haederKanbanDesk/HeaderKanbanDesk";
 import KanbanColumn, {kanbanColumnsVar} from "../ui/kanbanColumn/KanbanColumn";
-import {setTasks, TaskSliceProps} from "../../store/reducers/taskSlice";
+import {BoardSliceProps} from "../../store/reducers/taskSlice";
 import {DragDropContext, DropResult} from "react-beautiful-dnd";
-import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store/reducers";
+import {useTypedSelector} from "../../hooks/useTypedSelector";
 // import KanbanColumn, {kanbanColumnsVar} from "../ui/kanbanColumn/KanbanColumn";
 
 const KanbanDesk: FC = () => {
-    const tasks = useSelector((state: RootState) => state.task.tasks)
-    const [tasksUpdate, setTasksUpdate] = useState<TaskSliceProps[]>(tasks)
-    const dispatch = useDispatch()
-    type TaskUpdateFn = (taskId: string, newStatus: string) => TaskSliceProps[];
+    const boards = useTypedSelector((state: RootState) => state.boards.boards)
+    const [tasksUpdate, setTasksUpdate] = useState<BoardSliceProps[]>([]);
+
+    useEffect(() => {
+        const tasksString = localStorage.getItem('boards');
+        if (tasksString) {
+            const tasksArray = JSON.parse(tasksString) as BoardSliceProps[];
+            setTasksUpdate(tasksArray);
+        }
+    }, [boards]);
 
     interface KanbanColumnProps {
         statusColumn: string;
@@ -47,46 +53,56 @@ const KanbanDesk: FC = () => {
             className: cls.doneBlock
         }
     ];
-
-    const handleOnDragEnd = (result: DropResult) => {
-        const {source, destination, draggableId} = result;
-        if (!destination) {
-            return;
+    const [columns, setColumns] = useState(boards);
+    const handleOnDragEnd = (result: DropResult, columns: any, setColumns: any) => {
+        if (!result.destination) return;
+        const {source, destination} = result;
+        if (source.droppableId !== destination.droppableId) {
+            const sourceColumn = columns[source.droppableId];
+            const destColumn = columns[destination.droppableId];
+            const sourceItems = [...sourceColumn.items];
+            const destItems = [...destColumn.items];
+            const [removed] = sourceItems.splice(source.index, 1);
+            destItems.splice(destination.index, 0, removed);
+            setColumns({
+                ...columns,
+                [source.droppableId]: {
+                    ...sourceColumn,
+                    items: sourceItems
+                },
+                [destination.droppableId]: {
+                    ...destColumn,
+                    items: destItems
+                }
+            });
+        } else {
+            const column = columns[source.droppableId];
+            const copiedItems = [...column.items];
+            const [removed] = copiedItems.splice(source.index, 1);
+            copiedItems.splice(destination.index, 0, removed);
+            setColumns({
+                ...columns,
+                [source.droppableId]: {
+                    ...column,
+                    items: copiedItems
+                }
+            });
         }
-        if (source.droppableId === destination.droppableId && source.index === destination.index) {
-            return;
-        }
-        const columnTasks = tasks.filter(task => task.status === destination.droppableId);
-
-        const [draggedTask] = columnTasks.splice(source.index, 1);
-        columnTasks.splice(destination.index, 0, draggedTask);
-        const newTasks = tasks.map(task => {
-            if (task.id === draggableId) {
-                return {
-                    ...task,
-                    columnId: destination.droppableId,
-                    order: destination.index
-                };
-            }
-            return task;
-        });
-        setTasks(newTasks);
-    }
-
+    };
     return (
         <div className={cls.kanbanDesk}>
             <HeaderKanbanDesk></HeaderKanbanDesk>
             <div className={cls.desk}>
-                <DragDropContext onDragEnd={(result: DropResult) => handleOnDragEnd(result)}>
-                    {columnsData.map((column: KanbanColumnProps, index: number) => (
+                <DragDropContext onDragEnd={(result: DropResult) => handleOnDragEnd(result, columns, setColumns)}>
+                    {columnsData.map((column: KanbanColumnProps) => (
                         <KanbanColumn
                             className={column.className}
                             kanbanVar={column.kanbanVar}
                             titleColumn={column.titleColumn}
                             statusColumn={column.statusColumn}
                             setTasksUpdate={setTasksUpdate}
-                            taskUpdate={tasksUpdate}
-                            tasks={tasks}>
+                            taskUpdate={tasksUpdate.find((board) => board.name === column.statusColumn)?.items || []}
+                        >
                         </KanbanColumn>
                     ))}
                 </DragDropContext>

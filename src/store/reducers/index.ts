@@ -1,11 +1,12 @@
-import {combineReducers} from '@reduxjs/toolkit';
-import taskReducer, {TaskState} from './taskSlice';
+import {combineReducers} from "redux";
+import taskReducer, {TaskBoardState} from "./taskSlice";
 
-export interface RootState {
-    task: TaskState;
+export interface rootState {
+    boards: TaskBoardState;
 }
 
-export const rootReducer = combineReducers<RootState>({
-    task: taskReducer,
+export const rootReducer = combineReducers<rootState>({
+    boards: taskReducer,
 });
 
+export type RootState = ReturnType<typeof rootReducer>
