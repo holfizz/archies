@@ -7,9 +7,18 @@ import {PiListChecksBold} from "react-icons/pi";
 import {GoColumns} from "react-icons/go";
 import {BiLayout} from "react-icons/bi";
 
-const HeaderKanbanDesk: FC = () => {
+interface HeaderKanbanDeskProps {
+    lengthTasks: number
+    lengthDone: number
+}
+
+const HeaderKanbanDesk: FC<HeaderKanbanDeskProps> = ({lengthTasks, lengthDone}) => {
     const [selectionMode, setSelectionMode] = useState<string>('1')
     const [typeController, setTypeController] = useState<string>('1')
+    const doneFunc = () => {
+        const percent = lengthDone / lengthTasks * 100;
+        return percent.toFixed(0);
+    };
     return (
         <div className={cls.headerKanbanDesk}>
             <div>
@@ -22,9 +31,10 @@ const HeaderKanbanDesk: FC = () => {
                         <div className={cls.storageBlocks}>
                             <div className={cls.storageFill}>
                                 <div className={cls.storageFree}></div>
-                                <div className={cls.storageFilled}></div>
+                                <div style={{width: Number(doneFunc()) > 0 ? doneFunc() + '%' : '0%'}}
+                                     className={cls.storageFilled}></div>
                             </div>
-                            <h3 className={cls.titleComplete}>Complete 13%</h3>
+                            <h3 className={cls.titleComplete}>Complete {Number(doneFunc()) > 0 ? doneFunc() + '%' : '0%'}</h3>
                         </div>
                     </div>
                     <div className={cls.selectionModeBlock}>

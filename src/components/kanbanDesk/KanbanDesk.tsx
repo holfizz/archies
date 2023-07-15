@@ -2,15 +2,17 @@ import React, {FC, useEffect, useState} from "react";
 import cls from './KanbanDesk.module.scss'
 import HeaderKanbanDesk from "../haederKanbanDesk/HeaderKanbanDesk";
 import KanbanColumn, {kanbanColumnsVar} from "../ui/kanbanColumn/KanbanColumn";
-import {BoardSliceProps} from "../../store/reducers/taskSlice";
+import {BoardSliceProps, setTasks} from "../../store/reducers/taskSlice";
 import {DragDropContext, DropResult} from "react-beautiful-dnd";
 import {RootState} from "../../store/reducers";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
+import {useDispatch} from "react-redux";
 // import KanbanColumn, {kanbanColumnsVar} from "../ui/kanbanColumn/KanbanColumn";
 
 const KanbanDesk: FC = () => {
     const boards = useTypedSelector((state: RootState) => state.boards.boards)
     const [tasksUpdate, setTasksUpdate] = useState<BoardSliceProps[]>([]);
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const tasksString = localStorage.getItem('boards');
@@ -54,47 +56,63 @@ const KanbanDesk: FC = () => {
         }
     ];
     const [columns, setColumns] = useState(boards);
-    const handleOnDragEnd = (result: DropResult, columns: any, setColumns: any) => {
-        if (!result.destination) return;
-        const {source, destination} = result;
-        if (source.droppableId !== destination.droppableId) {
-            const sourceColumn = columns[source.droppableId];
-            const destColumn = columns[destination.droppableId];
-            const sourceItems = [...sourceColumn.items];
-            const destItems = [...destColumn.items];
-            const [removed] = sourceItems.splice(source.index, 1);
-            destItems.splice(destination.index, 0, removed);
-            setColumns({
-                ...columns,
-                [source.droppableId]: {
-                    ...sourceColumn,
-                    items: sourceItems
-                },
-                [destination.droppableId]: {
-                    ...destColumn,
-                    items: destItems
-                }
-            });
-        } else {
-            const column = columns[source.droppableId];
-            const copiedItems = [...column.items];
-            const [removed] = copiedItems.splice(source.index, 1);
-            copiedItems.splice(destination.index, 0, removed);
-            setColumns({
-                ...columns,
-                [source.droppableId]: {
-                    ...column,
-                    items: copiedItems
-                }
-            });
+
+    const handleOnDragEnd = (result: DropResult) => {
+        const {source, destination, draggableId} = result;
+        if (!destination) {
+            return;
         }
+        if (source.droppableId === destination.droppableId) {
+            return;
+        }
+        const sourceTasks = tasksUpdate.find(tasks => tasks.name === source.droppableId)?.items || [];
+        const destinationTasks = tasksUpdate.find(tasks => tasks.name === destination.droppableId)?.items || [];
+        if (sourceTasks.length === 1) {
+            // If there is only one item in the source column, prevent it from being dragged out
+            return;
+        }
+        const [draggedTask] = sourceTasks.splice(source.index, 1);
+        destinationTasks.splice(destination.index, 0, draggedTask);
+        const newTasks = tasksUpdate.map(tasks => {
+            if (tasks.name === source.droppableId) {
+                return {
+                    ...tasks,
+                    items: sourceTasks
+                };
+            }
+            if (tasks.name === destination.droppableId) {
+                return {
+                    ...tasks,
+                    items: destinationTasks.map((task, index) => {
+                        if (task.id === draggableId) {
+                            return {
+                                ...task,
+                                id: destination.droppableId,
+                                order: index
+                            };
+                        }
+                        return task;
+                    })
+                };
+            }
+            return tasks;
+        });
+        setTasksUpdate(newTasks);
+        dispatch(setTasks({boards: newTasks}))
+
     };
     return (
         <div className={cls.kanbanDesk}>
-            <HeaderKanbanDesk></HeaderKanbanDesk>
+            <HeaderKanbanDesk
+                lengthTasks={tasksUpdate.reduce((acc, task) => {
+                    return acc + (task.items?.length || 0);
+                }, 0)}
+                lengthDone={tasksUpdate.find((board) => board.name === 'done')?.items?.length || 0}
+            />
             <div className={cls.desk}>
-                <DragDropContext onDragEnd={(result: DropResult) => handleOnDragEnd(result, columns, setColumns)}>
-                    {columnsData.map((column: KanbanColumnProps) => (
+                <DragDropContext
+                    onDragEnd={(result: DropResult) => handleOnDragEnd(result)}>
+                    {columnsData.map((column: KanbanColumnProps, index: number) => (
                         <KanbanColumn
                             className={column.className}
                             kanbanVar={column.kanbanVar}
@@ -102,6 +120,7 @@ const KanbanDesk: FC = () => {
                             statusColumn={column.statusColumn}
                             setTasksUpdate={setTasksUpdate}
                             taskUpdate={tasksUpdate.find((board) => board.name === column.statusColumn)?.items || []}
+                            index={index}
                         >
                         </KanbanColumn>
                     ))}

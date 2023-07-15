@@ -1,21 +1,23 @@
-import React, {Dispatch, FC, ReactNode, SetStateAction} from 'react';
+import React, {Dispatch, FC, SetStateAction} from 'react';
 import cls from './CardInfModal.module.scss'
 
 interface ModalProps {
-    children?: ReactNode,
     visible: boolean,
-    setVisible: Dispatch<SetStateAction<boolean>>
+    setVisible: Dispatch<SetStateAction<number | null>>,
+    title: string;
+    description: string;
+
 }
 
-const CardInfModal: FC<ModalProps> = ({children, visible, setVisible}) => {
+const CardInfModal: FC<ModalProps> = ({visible, setVisible, title, description}) => {
     const rootClasses = [cls.modal]
     if (visible) {
         rootClasses.push(cls.active)
     }
     return (
-        <div className={rootClasses.join(' ')} onClick={() => setVisible(false)}>
+        <div className={rootClasses.join(' ')} onClick={() => setVisible(null)}>
             <div className={cls.modalContent} onClick={(e) => e.stopPropagation()}>
-                {children}
+                <h1 className={cls.modalTitle}>{title}</h1>
             </div>
         </div>
     );

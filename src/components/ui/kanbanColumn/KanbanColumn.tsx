@@ -25,6 +25,7 @@ interface kanbanInterface {
     statusColumn: string
     setTasksUpdate: any
     taskUpdate: any[],
+    index: number
 }
 
 const KanbanColumn: FC<kanbanInterface> = ({
@@ -35,12 +36,11 @@ const KanbanColumn: FC<kanbanInterface> = ({
                                                children,
                                                setTasksUpdate,
                                                taskUpdate,
+                                               index
                                            }) => {
     const [visible, setVisible] = useState<boolean>(false)
     const [title, setTitle] = useState<string>('')
     const [description, setDescription] = useState<string>('')
-
-
     const dispatch = useDispatch()
 
     const handleDescriptionChange = (value: string) => {
@@ -50,7 +50,7 @@ const KanbanColumn: FC<kanbanInterface> = ({
         setTitle(value);
     };
     const handleDeleteTask = (task: TaskSliceProps, status: string, taskId: string) => {
-        dispatch(deleteTask({boardId: status, taskId: taskId}));
+        dispatch(deleteTask({boardId: index, taskId: taskId}));
         setTasksUpdate((prevTasks: TaskSliceProps[]) =>
             prevTasks.filter((t: TaskSliceProps) => t.id !== task.id)
         );
@@ -67,7 +67,7 @@ const KanbanColumn: FC<kanbanInterface> = ({
         };
 
         dispatch(addTask({
-            boardId: statusColumn,
+            boardId: index,
             task: newTask,
         }));
 
@@ -84,9 +84,14 @@ const KanbanColumn: FC<kanbanInterface> = ({
                 >
                     <div className={[cls.kanbanColumn, className].join(' ')}>
                         <div className={cls.titleBlockKanban}>
-                            <div className={cls.titleBlock}>
-                                <div className={kanbanVar && cls[kanbanVar + 'Ellipse']}></div>
-                                <h2 className={cls.kanbanTitle}>{titleColumn}</h2>
+                            <div className={cls.titleBlockNum}>
+                                <div className={cls.titleBlock}>
+                                    <div className={kanbanVar && cls[kanbanVar + 'Ellipse']}></div>
+                                    <h2 className={cls.kanbanTitle}>{titleColumn}</h2>
+                                </div>
+                                <div className={cls.ellipseNum}>
+                                    <h1>{taskUpdate.length}</h1>
+                                </div>
                             </div>
                             <BsThreeDotsVertical/>
                         </div>
