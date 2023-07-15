@@ -3,7 +3,7 @@ import cls from './CardInfModal.module.scss'
 
 interface ModalProps {
     visible: boolean,
-    setVisible: Dispatch<SetStateAction<number | null>>,
+    setVisible: Dispatch<SetStateAction<string | null>>,
     title: string;
     description: string;
 
