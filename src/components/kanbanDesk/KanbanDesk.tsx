@@ -55,51 +55,50 @@ const KanbanDesk: FC = () => {
             className: cls.doneBlock
         }
     ];
-    const [columns, setColumns] = useState(boards);
 
     const handleOnDragEnd = (result: DropResult) => {
         const {source, destination, draggableId} = result;
         if (!destination) {
             return;
         }
-        if (source.droppableId === destination.droppableId) {
+        if (source.droppableId === destination.droppableId && source.index === destination.index) {
             return;
         }
+        console.log("draggableId", draggableId)
+        console.log("destination", destination)
+        console.log("source", source)
         const sourceTasks = tasksUpdate.find(tasks => tasks.name === source.droppableId)?.items || [];
         const destinationTasks = tasksUpdate.find(tasks => tasks.name === destination.droppableId)?.items || [];
-        if (sourceTasks.length === 1) {
-            // If there is only one item in the source column, prevent it from being dragged out
+        const [draggedTask] = sourceTasks.splice(source.index, 1);
+        if (destinationTasks.length === 1 && sourceTasks.length > 1) {
+            // If the destination column has only one item, prevent dragging into it
+            sourceTasks.splice(source.index, 0, draggedTask);
             return;
         }
-        const [draggedTask] = sourceTasks.splice(source.index, 1);
-        destinationTasks.splice(destination.index, 0, draggedTask);
+        destinationTasks.splice(destination.index, 0, {...draggedTask, status: destination.droppableId});
         const newTasks = tasksUpdate.map(tasks => {
             if (tasks.name === source.droppableId) {
                 return {
                     ...tasks,
-                    items: sourceTasks
+                    items: sourceTasks.map((task, index) => ({
+                        ...task,
+                        order: index
+                    }))
                 };
             }
             if (tasks.name === destination.droppableId) {
                 return {
                     ...tasks,
-                    items: destinationTasks.map((task, index) => {
-                        if (task.id === draggableId) {
-                            return {
-                                ...task,
-                                id: destination.droppableId,
-                                order: index
-                            };
-                        }
-                        return task;
-                    })
+                    items: destinationTasks.map((task, index) => ({
+                        ...task,
+                        order: index
+                    }))
                 };
             }
             return tasks;
         });
         setTasksUpdate(newTasks);
-        dispatch(setTasks({boards: newTasks}))
-
+        dispatch(setTasks({boards: newTasks}));
     };
     return (
         <div className={cls.kanbanDesk}>
