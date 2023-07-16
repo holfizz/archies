@@ -34,86 +34,91 @@ const KanbanCard: FC<KanbanCardProps> = ({status, tasks, onDeleteTask}) => {
                 return (
                     <div>
                         <Draggable key={item.id} draggableId={item.id} index={index}>
-                            {(provided) => (
-                                <div
-                                    key={item.id}
-                                    className={cls.card}
-                                    onClick={() => handleTaskClick(item.title)}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    ref={provided.innerRef}
-                                >
-                                    <div className={cls.cardCategoryTitle}>
-                                        <div className={cls.category}>UX stages</div>
-                                        <div
-                                            className={cls.deleteTask}
-                                            onClick={(e: any) => {
-                                                e.stopPropagation();
-                                                handleModalToggle(index);
-                                            }}
-                                        >
-                                            <BsThreeDotsVertical/>
-                                        </div>
-                                    </div>
-                                    <h1 className={cls.cardTitle}>{item.title}</h1>
-                                    <div className={cls.cardBlockParagraph}>
-                                        <p className={cls.cardDescription}>{item.description}</p>
-                                    </div>
-                                    <div className={cls.taskCompleteBlock}>
-                                        <PiListChecksBold/>
-                                        0/8
-                                    </div>
-                                    <div className={cls.line}></div>
-                                    <div>
-                                        <div className={cls.users}>
-                                            <div className={[cls.user, cls.user_one].join(" ")}></div>
-                                            <div className={[cls.user, cls.user_two].join(" ")}></div>
-                                            <div className={[cls.user, cls.user_three].join(" ")}></div>
-                                        </div>
-                                        <div className={cls.socialStats}>
-                                            <div className={cls.socialsButtonEye}>
-                                                <AiOutlineEye></AiOutlineEye> 2
-                                            </div>
-                                            <div className={cls.socialsButtonComments}>
-                                                <BsChatSquareDots/> 4
-                                            </div>
-                                            <div className={cls.socialsButtonClip}>
-                                                <FiPaperclip/> 5
+                            {(provided, snapshot) => (
+                                <>
+                                    <div
+                                        key={item.id}
+                                        className={cls.card}
+                                        onClick={() => handleTaskClick(item.title)}
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                        ref={provided.innerRef}
+                                    >
+                                        <div className={cls.cardCategoryTitle}>
+                                            <div className={cls.category}>UX stages</div>
+                                            <div
+                                                className={cls.deleteTask}
+                                                onClick={(e: any) => {
+                                                    e.stopPropagation();
+                                                    handleModalToggle(index);
+                                                }}
+                                            >
+                                                <BsThreeDotsVertical/>
                                             </div>
                                         </div>
-                                    </div>
-
-                                    {openModalIndex === index && (
-                                        <div className={cls.modal}>
-                                            <div className={cls.modalContent}>
-                                                <div
-                                                    className={cls.closeModal}
-                                                    onClick={(e: any) => {
-                                                        e.stopPropagation();
-                                                        handleModalToggle(index);
-                                                    }}
-                                                >
-                                                    <GrFormClose/>
+                                        <h1 className={cls.cardTitle}>{item.title}</h1>
+                                        <div className={cls.cardBlockParagraph}>
+                                            <p className={cls.cardDescription}>{item.description}</p>
+                                        </div>
+                                        <div className={cls.taskCompleteBlock}>
+                                            <PiListChecksBold/>
+                                            0/8
+                                        </div>
+                                        <div className={cls.line}></div>
+                                        <div>
+                                            <div className={cls.users}>
+                                                <div className={[cls.user, cls.user_one].join(" ")}></div>
+                                                <div className={[cls.user, cls.user_two].join(" ")}></div>
+                                                <div className={[cls.user, cls.user_three].join(" ")}></div>
+                                            </div>
+                                            <div className={cls.socialStats}>
+                                                <div className={cls.socialsButtonEye}>
+                                                    <AiOutlineEye></AiOutlineEye> 2
                                                 </div>
-                                                <div className={cls.modalBody}>
-                                                    <Button
-                                                        onClick={() => {
+                                                <div className={cls.socialsButtonComments}>
+                                                    <BsChatSquareDots/> 4
+                                                </div>
+                                                <div className={cls.socialsButtonClip}>
+                                                    <FiPaperclip/> 5
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {openModalIndex === index && (
+                                            <div className={cls.modal}>
+                                                <div className={cls.modalContent}>
+                                                    <div
+                                                        className={cls.closeModal}
+                                                        onClick={(e: any) => {
+                                                            e.stopPropagation();
                                                             handleModalToggle(index);
-                                                            setSelectedTaskIndex(null)
-                                                            onDeleteTask(item, item.status, item.id);
-
                                                         }}
-                                                        buttonStyle={ButtonStyle.CLEAR}
-                                                        className={cls.buttonDelete}
                                                     >
-                                                        Delete
-                                                    </Button>
+                                                        <GrFormClose/>
+                                                    </div>
+                                                    <div className={cls.modalBody}>
+                                                        <Button
+                                                            onClick={() => {
+                                                                handleModalToggle(index);
+                                                                setSelectedTaskIndex(null)
+                                                                onDeleteTask(item, item.status, item.id);
+
+                                                            }}
+                                                            buttonStyle={ButtonStyle.CLEAR}
+                                                            className={cls.buttonDelete}
+                                                        >
+                                                            Delete
+                                                        </Button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    )}
+                                        )}
 
-                                </div>
+                                    </div>
+                                    {snapshot.isDragging ? <div className={cls.cloneCard}>
+
+                                    </div> : null}
+                                </>
                             )}
                         </Draggable>
                         {selectedTaskIndex === item.title && (

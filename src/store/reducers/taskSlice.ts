@@ -1,11 +1,17 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
+export interface list {
+    id: number
+    title: string
+}
+
 export interface TaskSliceProps {
     id: string
     title: string;
     description: string;
     status: string;
     order: number
+    list?: list[]
 }
 
 export interface TaskState {
