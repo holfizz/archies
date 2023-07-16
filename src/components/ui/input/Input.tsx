@@ -3,7 +3,8 @@ import cls from './Input.module.scss';
 
 export enum InputStyle {
     PRIMARY = 'primary',
-    GRAY = 'gray'
+    GRAY = 'gray',
+    BLUE = 'blue'
 }
 
 interface InputInterface {

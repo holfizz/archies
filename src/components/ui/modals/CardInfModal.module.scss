@@ -37,3 +37,45 @@
 .modalTitle {
   font-size: 18px;
 }
+
+.inputSubtask {
+  margin: 10px 0;
+}
+
+.itemList {
+  display: flex;
+  width: 350px;
+  height: 20px;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 22px;
+  margin: 10px 0;
+}
+
+.itemChecked {
+  text-decoration: line-through;
+  color: #9d9d9d;
+}
+
+.customCheckbox {
+  width: 22px;
+  height: 22px;
+}
+
+.buttonDelete {
+  color: #9d9d9d;
+  transition: all 0.3s;
+
+}
+
+.buttonDelete:hover {
+  color: red;
+  transition: all 0.3s;
+}
+
+.controlItem {
+  width: 70px;
+  display: flex;
+  justify-content: space-between;
+}
+

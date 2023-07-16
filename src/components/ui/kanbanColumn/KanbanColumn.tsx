@@ -64,6 +64,7 @@ const KanbanColumn: FC<kanbanInterface> = ({
             description: description,
             status: statusColumn,
             order: tasksWithSameStatus.length,
+            list: []
         };
 
         dispatch(addTask({
@@ -99,7 +100,7 @@ const KanbanColumn: FC<kanbanInterface> = ({
                             setVisible(true)
                         }} buttonStyle={ButtonStyle.PRIMARY_DARK}><BsPlus/>Add New Task</Button>
                         <div>{children}</div>
-                        <KanbanCard tasks={taskUpdate} status={statusColumn}
+                        <KanbanCard tasks={taskUpdate}
                                     onDeleteTask={handleDeleteTask}/>
                         {visible && <Modal visible={visible} setVisible={setVisible}>
                             <Input className={cls.modalAddTask} onChange={handleTitleChange}

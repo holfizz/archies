@@ -28,3 +28,14 @@
 .gray::placeholder {
   color: #C8C7CB;
 }
+
+.blue {
+  color: #365EFF;
+  border: 2px solid #365EFF;
+  border-radius: 10px;
+  padding: 0 20px;
+}
+
+.blue::placeholder {
+  color: rgba(54, 94, 255, 0.63);
+}

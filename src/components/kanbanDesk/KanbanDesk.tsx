@@ -57,16 +57,13 @@ const KanbanDesk: FC = () => {
     ];
 
     const handleOnDragEnd = (result: DropResult) => {
-        const {source, destination, draggableId} = result;
+        const {source, destination} = result;
         if (!destination) {
             return;
         }
         if (source.droppableId === destination.droppableId && source.index === destination.index) {
             return;
         }
-        console.log("draggableId", draggableId)
-        console.log("destination", destination)
-        console.log("source", source)
         const sourceTasks = tasksUpdate.find(tasks => tasks.name === source.droppableId)?.items || [];
         const destinationTasks = tasksUpdate.find(tasks => tasks.name === destination.droppableId)?.items || [];
         const [draggedTask] = sourceTasks.splice(source.index, 1);

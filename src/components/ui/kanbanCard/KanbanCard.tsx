@@ -11,12 +11,11 @@ import {TaskSliceProps} from "../../../store/reducers/taskSlice";
 import CardInfModal from "../modals/CardInfModal";
 
 interface KanbanCardProps {
-    status: string;
     tasks: TaskSliceProps[];
     onDeleteTask: (task: TaskSliceProps, status: string, taskId: string) => void;
 }
 
-const KanbanCard: FC<KanbanCardProps> = ({status, tasks, onDeleteTask}) => {
+const KanbanCard: FC<KanbanCardProps> = ({tasks, onDeleteTask}) => {
     const [openModalIndex, setOpenModalIndex] = useState<number | null>(null);
     const [selectedTaskIndex, setSelectedTaskIndex] = useState<string | null>(null);
 
@@ -27,7 +26,6 @@ const KanbanCard: FC<KanbanCardProps> = ({status, tasks, onDeleteTask}) => {
     const handleTaskClick = (title: string) => {
         setSelectedTaskIndex((prevTitle) => (prevTitle === title ? null : title));
     };
-
     return (
         <div>
             {tasks.map((item: TaskSliceProps, index: number) => {
@@ -62,7 +60,7 @@ const KanbanCard: FC<KanbanCardProps> = ({status, tasks, onDeleteTask}) => {
                                         </div>
                                         <div className={cls.taskCompleteBlock}>
                                             <PiListChecksBold/>
-                                            0/8
+                                            {item.list.filter((subtask) => subtask.checked).length}/{item.list.length}
                                         </div>
                                         <div className={cls.line}></div>
                                         <div>
@@ -127,6 +125,9 @@ const KanbanCard: FC<KanbanCardProps> = ({status, tasks, onDeleteTask}) => {
                                 setVisible={setSelectedTaskIndex}
                                 title={item.title}
                                 description={item.description}
+                                list={item.list}
+                                status={item.status}
+                                id={item.id}
                             />
                         )}
                     </div>
