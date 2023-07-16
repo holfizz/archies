@@ -71,7 +71,6 @@ const KanbanDesk: FC = () => {
         const destinationTasks = tasksUpdate.find(tasks => tasks.name === destination.droppableId)?.items || [];
         const [draggedTask] = sourceTasks.splice(source.index, 1);
         if (destinationTasks.length === 1 && sourceTasks.length > 1) {
-            // If the destination column has only one item, prevent dragging into it
             sourceTasks.splice(source.index, 0, draggedTask);
             return;
         }

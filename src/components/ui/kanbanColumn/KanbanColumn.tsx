@@ -99,7 +99,8 @@ const KanbanColumn: FC<kanbanInterface> = ({
                             setVisible(true)
                         }} buttonStyle={ButtonStyle.PRIMARY_DARK}><BsPlus/>Add New Task</Button>
                         <div>{children}</div>
-                        <KanbanCard tasks={taskUpdate} status={statusColumn} onDeleteTask={handleDeleteTask}/>
+                        <KanbanCard tasks={taskUpdate} status={statusColumn}
+                                    onDeleteTask={handleDeleteTask}/>
                         {visible && <Modal visible={visible} setVisible={setVisible}>
                             <Input className={cls.modalAddTask} onChange={handleTitleChange}
                                    inputStyle={InputStyle.PRIMARY}
