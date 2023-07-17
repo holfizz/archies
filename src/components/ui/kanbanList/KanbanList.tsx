@@ -1,5 +1,5 @@
 import {FC, ReactNode, useState} from "react";
-import cls from './KanbanColumn.module.scss'
+import cls from './KanbanList.module.scss'
 import {BsPlus, BsThreeDotsVertical} from "react-icons/bs";
 import Button, {ButtonStyle} from "../button/Button";
 import KanbanCard from "../kanbanCard/KanbanCard";
@@ -28,16 +28,16 @@ interface kanbanInterface {
     index: number
 }
 
-const KanbanColumn: FC<kanbanInterface> = ({
-                                               className,
-                                               kanbanVar,
-                                               titleColumn,
-                                               statusColumn,
-                                               children,
-                                               setTasksUpdate,
-                                               taskUpdate,
-                                               index
-                                           }) => {
+const KanbanList: FC<kanbanInterface> = ({
+                                             className,
+                                             kanbanVar,
+                                             titleColumn,
+                                             statusColumn,
+                                             children,
+                                             setTasksUpdate,
+                                             taskUpdate,
+                                             index
+                                         }) => {
     const [visible, setVisible] = useState<boolean>(false)
     const [title, setTitle] = useState<string>('')
     const [description, setDescription] = useState<string>('')
@@ -100,7 +100,7 @@ const KanbanColumn: FC<kanbanInterface> = ({
                             setVisible(true)
                         }} buttonStyle={ButtonStyle.PRIMARY_DARK}><BsPlus/>Add New Task</Button>
                         <div>{children}</div>
-                        <KanbanCard typeBoard={'board'} tasks={taskUpdate}
+                        <KanbanCard typeBoard={'list'} tasks={taskUpdate}
                                     onDeleteTask={handleDeleteTask}/>
                         {visible && <Modal visible={visible} setVisible={setVisible}>
                             <Input className={cls.modalAddTask} onChange={handleTitleChange}
@@ -130,4 +130,4 @@ const KanbanColumn: FC<kanbanInterface> = ({
     )
 }
 
-export default KanbanColumn
+export default KanbanList

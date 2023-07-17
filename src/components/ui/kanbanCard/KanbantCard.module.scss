@@ -77,6 +77,28 @@
   }
 }
 
+.green {
+  background: rgba(15, 176, 150, 0.27);
+  border: 1px solid #0FB096;
+  color: #0FB096;
+
+  svg {
+    fill: #0FB096;
+    transform: scale(1.5);
+  }
+}
+
+.red {
+  background: rgba(235, 167, 163, 0.27);
+  border: 1px solid #EBA7A3;
+  color: #EBA7A3;
+
+  svg {
+    fill: #EBA7A3;
+    transform: scale(1.5);
+  }
+}
+
 .cardCategoryTitle {
   display: flex;
   justify-content: space-between;
@@ -220,3 +242,10 @@
   justify-content: center;
 }
 
+.list {
+  display: flex;
+
+  .card {
+    margin: 20px;
+  }
+}

@@ -7,12 +7,15 @@ import {DragDropContext, DropResult} from "react-beautiful-dnd";
 import {RootState} from "../../store/reducers";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import {useDispatch} from "react-redux";
+import KanbanList from "../ui/kanbanList/KanbanList";
 // import KanbanColumn, {kanbanColumnsVar} from "../ui/kanbanColumn/KanbanColumn";
 
 const KanbanDesk: FC = () => {
     const boards = useTypedSelector((state: RootState) => state.boards.boards)
     const [tasksUpdate, setTasksUpdate] = useState<BoardSliceProps[]>([]);
+    const [typeBoard, setTypeBoard] = useState<string>('');
     const dispatch = useDispatch()
+
 
     useEffect(() => {
         const tasksString = localStorage.getItem('boards');
@@ -98,27 +101,44 @@ const KanbanDesk: FC = () => {
     };
     return (
         <div className={cls.kanbanDesk}>
-            <HeaderKanbanDesk
-                lengthTasks={tasksUpdate.reduce((acc, task) => {
-                    return acc + (task.items?.length || 0);
-                }, 0)}
-                lengthDone={tasksUpdate.find((board) => board.name === 'done')?.items?.length || 0}
+            <HeaderKanbanDesk setTypeBoard={setTypeBoard}
+                              lengthTasks={tasksUpdate.reduce((acc, task) => {
+                                  return acc + (task.items?.length || 0);
+                              }, 0)}
+                              lengthDone={tasksUpdate.find((board) => board.name === 'done')?.items?.length || 0}
             />
-            <div className={cls.desk}>
+            <div className={[cls.desk, typeBoard === 'board' ? cls.board : cls.list].join(' ')}>
                 <DragDropContext
                     onDragEnd={(result: DropResult) => handleOnDragEnd(result)}>
-                    {columnsData.map((column: KanbanColumnProps, index: number) => (
-                        <KanbanColumn
-                            className={column.className}
-                            kanbanVar={column.kanbanVar}
-                            titleColumn={column.titleColumn}
-                            statusColumn={column.statusColumn}
-                            setTasksUpdate={setTasksUpdate}
-                            taskUpdate={tasksUpdate.find((board) => board.name === column.statusColumn)?.items || []}
-                            index={index}
-                        >
-                        </KanbanColumn>
-                    ))}
+                    {columnsData.map((column: KanbanColumnProps, index: number) => {
+                        return (
+                            <div>
+                                {typeBoard === 'board' ?
+                                    <KanbanColumn
+                                        className={column.className}
+                                        kanbanVar={column.kanbanVar}
+                                        titleColumn={column.titleColumn}
+                                        statusColumn={column.statusColumn}
+                                        setTasksUpdate={setTasksUpdate}
+                                        taskUpdate={tasksUpdate.find((board) => board.name === column.statusColumn)?.items || []}
+                                        index={index}
+                                    >
+                                    </KanbanColumn>
+                                    : <KanbanList
+                                        className={column.className}
+                                        kanbanVar={column.kanbanVar}
+                                        titleColumn={column.titleColumn}
+                                        statusColumn={column.statusColumn}
+                                        setTasksUpdate={setTasksUpdate}
+                                        taskUpdate={tasksUpdate.find((board) => board.name === column.statusColumn)?.items || []}
+                                        index={index}
+                                    >
+                                    </KanbanList>
+                                }
+                            </div>
+                        )
+
+                    })}
                 </DragDropContext>
             </div>
         </div>

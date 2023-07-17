@@ -11,7 +11,14 @@
 }
 
 .desk {
-  display: flex;
   position: relative;
   top: 50px;
+}
+
+.board {
+  display: flex;
+}
+
+.list {
+  display: block;
 }

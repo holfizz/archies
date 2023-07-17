@@ -1,24 +1,27 @@
-import React, {FC, useState} from "react";
+import React, {Dispatch, FC, useEffect, useState} from "react";
 import cls from './HeaderKanbanDesk.module.scss'
 import {RiDatabaseLine} from "react-icons/ri";
 import Button, {ButtonStyle} from "../ui/button/Button";
 import {BsPlus} from "react-icons/bs";
 import {PiListChecksBold} from "react-icons/pi";
 import {GoColumns} from "react-icons/go";
-import {BiLayout} from "react-icons/bi";
 
 interface HeaderKanbanDeskProps {
     lengthTasks: number
-    lengthDone: number
+    lengthDone: number,
+    setTypeBoard: Dispatch<string>
 }
 
-const HeaderKanbanDesk: FC<HeaderKanbanDeskProps> = ({lengthTasks, lengthDone}) => {
+const HeaderKanbanDesk: FC<HeaderKanbanDeskProps> = ({lengthTasks, lengthDone, setTypeBoard}) => {
     const [selectionMode, setSelectionMode] = useState<string>('1')
-    const [typeController, setTypeController] = useState<string>('1')
+    const [typeController, setTypeController] = useState<string>('board')
     const doneFunc = () => {
         const percent = lengthDone / lengthTasks * 100;
         return percent.toFixed(0);
     };
+    useEffect(() => {
+        setTypeBoard(typeController)
+    }, [typeController])
     return (
         <div className={cls.headerKanbanDesk}>
             <div>
@@ -76,16 +79,13 @@ const HeaderKanbanDesk: FC<HeaderKanbanDeskProps> = ({lengthTasks, lengthDone}) 
 
                 </div>
                 <div className={cls.typeKanbanController}>
-                    <button onClick={() => setTypeController('1')}
-                            className={[cls.typeControllerButton, typeController === '1' && cls.active].join(' ')}>
+                    <button onClick={() => setTypeController('board')}
+                            className={[cls.typeControllerButton, typeController === 'board' && cls.active].join(' ')}>
                         <GoColumns/>Board
                     </button>
-                    <button onClick={() => setTypeController('2')}
-                            className={[cls.typeControllerButton, typeController === '2' && cls.active].join(' ')}>
-                        <BiLayout/>Table
-                    </button>
-                    <button onClick={() => setTypeController('3')}
-                            className={[cls.typeControllerButton, typeController === '3' && cls.active].join(' ')}>
+
+                    <button onClick={() => setTypeController('list')}
+                            className={[cls.typeControllerButton, typeController === 'list' && cls.active].join(' ')}>
                         <PiListChecksBold/>List
                     </button>
                 </div>

@@ -13,9 +13,10 @@ import CardInfModal from "../modals/CardInfModal";
 interface KanbanCardProps {
     tasks: TaskSliceProps[];
     onDeleteTask: (task: TaskSliceProps, status: string, taskId: string) => void;
+    typeBoard: string
 }
 
-const KanbanCard: FC<KanbanCardProps> = ({tasks, onDeleteTask}) => {
+const KanbanCard: FC<KanbanCardProps> = ({tasks, onDeleteTask, typeBoard}) => {
     const [openModalIndex, setOpenModalIndex] = useState<number | null>(null);
     const [selectedTaskIndex, setSelectedTaskIndex] = useState<string | null>(null);
 
@@ -27,7 +28,7 @@ const KanbanCard: FC<KanbanCardProps> = ({tasks, onDeleteTask}) => {
         setSelectedTaskIndex((prevTitle) => (prevTitle === title ? null : title));
     };
     return (
-        <div>
+        <div className={[typeBoard === 'list' && cls.list].join(' ')}>
             {tasks.map((item: TaskSliceProps, index: number) => {
                 return (
                     <div>
@@ -58,7 +59,11 @@ const KanbanCard: FC<KanbanCardProps> = ({tasks, onDeleteTask}) => {
                                         <div className={cls.cardBlockParagraph}>
                                             <p className={cls.cardDescription}>{item.description}</p>
                                         </div>
-                                        <div className={cls.taskCompleteBlock}>
+                                        <div
+                                            className={[cls.taskCompleteBlock,
+                                                item.list.filter((subtask) => subtask.checked).length === item.list.length && item.list.length !== 0 && cls.green,
+                                                item.list.length === 0 && cls.red
+                                            ].join(' ')}>
                                             <PiListChecksBold/>
                                             {item.list.filter((subtask) => subtask.checked).length}/{item.list.length}
                                         </div>
