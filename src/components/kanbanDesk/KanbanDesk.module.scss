@@ -8,7 +8,6 @@
   display: flex;
   background: #f5f4f4;
   flex-direction: column;
-
 }
 
 .desk {
@@ -19,9 +18,200 @@
   display: flex;
   width: -webkit-fill-available;
   overflow: auto;
-
+  height: -webkit-fill-available;
 }
 
 .list {
   display: block;
+}
+
+.listSearch {
+  width: 100%;
+  justify-content: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  height: auto;
+}
+
+.card {
+  width: 300px;
+  flex-wrap: wrap;
+  height: 300px;
+  position: relative;
+  background: #fff;
+  top: 20px;
+  border-radius: 6px;
+  padding: 20px;
+  box-sizing: border-box;
+  margin: 20px;
+}
+
+.cardCategoryTitle {
+  display: flex;
+  justify-content: space-between;
+}
+
+.category {
+  width: 110px;
+  height: 30px;
+  border-radius: 30px;
+  color: #F2B96C;
+  background: rgba(245, 179, 52, 0.2);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+}
+
+.cardTitle {
+  font-size: 16px;
+  color: #042b50;
+  height: 20px;
+  line-height: 1.2;
+  width: -webkit-fill-available;
+  text-overflow: ellipsis;
+}
+
+.cardBlockParagraph {
+  width: -webkit-fill-available;
+  height: 70px;
+}
+
+.cardDescription {
+  width: -webkit-fill-available;
+  color: #9d9d9d;
+  font-size: 14px;
+  line-height: 1.2;
+  max-height: 70px;
+  height: auto;
+  text-overflow: ellipsis;
+}
+
+.taskCompleteBlock {
+  width: 80px;
+  height: 30px;
+  background: #fff;
+  border-radius: 5px;
+  border: 1px solid #9d9d9d;
+  color: #b0b0b2;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  svg {
+    fill: #b0b0b2;
+    transform: scale(1.5);
+  }
+}
+
+.green {
+  background: rgba(15, 176, 150, 0.27);
+  border: 1px solid #0FB096;
+  color: #0FB096;
+
+  svg {
+    fill: #0FB096;
+    transform: scale(1.5);
+  }
+}
+
+.red {
+  background: rgba(235, 167, 163, 0.27);
+  border: 1px solid #EBA7A3;
+  color: #EBA7A3;
+
+  svg {
+    fill: #EBA7A3;
+    transform: scale(1.5);
+  }
+}
+
+.cardCategoryTitle {
+  display: flex;
+  justify-content: space-between;
+}
+
+.line {
+  width: 300px;
+  height: 1px;
+  background: #9d9d9d;
+  margin: 20px -20px;
+}
+
+.users {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.user {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #9d9d9d;
+  border: 2px solid #fff;
+  position: absolute;
+  left: 0;
+  margin: -10px 20px;
+}
+
+.user_two {
+  left: 30px;
+}
+
+.user_three {
+  left: 60px;
+}
+
+.user_four {
+  left: 90px;
+}
+
+.socialStats {
+  width: 50%;
+  height: 30px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  align-items: center;
+  left: 120px;
+}
+
+.socialsButtonEye {
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+
+  svg {
+    fill: #9d9d9d;
+    transform: scale(1.4);
+  }
+
+  color: #9d9d9d;
+}
+
+.socialsButtonComments {
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+
+  svg {
+    fill: #9d9d9d;
+    transform: scale(1.1);
+
+  }
+
+  color: #9d9d9d;
+}
+
+.socialsButtonClip {
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 600;
+
+  svg {
+    stroke: #9d9d9d;
+  }
+
+  color: #9d9d9d;
 }

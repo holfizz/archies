@@ -1,16 +1,20 @@
-import {FC} from "react";
+import {Dispatch, FC} from "react";
 import Input, {InputStyle} from "../../ui/input/Input";
 import {RiSettings4Line} from "react-icons/ri";
 import cls from './Header.module.scss'
 import {MdOutlineNotificationsActive, MdOutlineNotificationsNone} from "react-icons/md";
 import {FiSearch} from "react-icons/fi";
 
-const Header: FC = () => {
+interface HeaderProps {
+    setSearchQuery: Dispatch<string>
+}
+
+const Header: FC<HeaderProps> = ({setSearchQuery}) => {
     return (
         <div className={cls.header}>
             <div className={cls.search}>
                 <FiSearch/>
-                <Input placeholder={'Search'} type={'text'} inputStyle={InputStyle.GRAY}/>
+                <Input onChange={setSearchQuery} placeholder={'Search'} type={'text'} inputStyle={InputStyle.GRAY}/>
             </div>
             <div className={cls.headerController}>
 
