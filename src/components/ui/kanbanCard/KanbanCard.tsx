@@ -118,7 +118,8 @@ const KanbanCard: FC<KanbanCardProps> = ({tasks, onDeleteTask, typeBoard}) => {
                                         )}
 
                                     </div>
-                                    {snapshot.isDragging ? <div className={cls.cloneCard}>
+                                    {snapshot.isDragging ? <div
+                                        className={[typeBoard === 'list' ? cls.listCloneCard : cls.cloneCard].join(' ')}>
 
                                     </div> : null}
                                 </>

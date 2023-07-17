@@ -8,15 +8,18 @@
   display: flex;
   background: #f5f4f4;
   flex-direction: column;
+
 }
 
 .desk {
   position: relative;
-  top: 50px;
 }
 
 .board {
   display: flex;
+  width: -webkit-fill-available;
+  overflow: auto;
+
 }
 
 .list {

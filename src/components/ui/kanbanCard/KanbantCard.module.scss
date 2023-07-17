@@ -14,12 +14,11 @@
 .cloneCard {
   width: 300px;
   height: 300px;
-  position: relative;
-  top: 20px;
+  position: absolute;
   border-radius: 6px;
   padding: 20px;
   box-sizing: border-box;
-  margin-top: 20px;
+  margin-top: 40px;
   border: 3px dashed #9d9d9d;
 }
 
@@ -228,11 +227,6 @@
   background: #000;
 }
 
-.drag {
-  width: 300px;
-  height: 300px;
-  border: 3px dashed #9d9d9d;
-}
 
 .deleteTask {
   width: 50px;
@@ -244,8 +238,25 @@
 
 .list {
   display: flex;
+  flex-wrap: nowrap;
+  margin: 20px;
+  overflow-x: auto;
+  padding: 10px;
+  flex-direction: row;
 
   .card {
     margin: 20px;
   }
+
+  .listCloneCard {
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    border-radius: 6px;
+    padding: 20px;
+    box-sizing: border-box;
+    margin: 40px 20px 20px 20px;
+    border: 3px dashed #9d9d9d;
+  }
 }
+

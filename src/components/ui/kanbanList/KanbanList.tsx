@@ -77,9 +77,10 @@ const KanbanList: FC<kanbanInterface> = ({
     }
 
     return (
-        <Droppable droppableId={statusColumn} key={statusColumn}>
+        <Droppable droppableId={statusColumn} key={statusColumn} direction={'horizontal'}>
             {(provided) => (
                 <div
+                    className={cls.horizontal}
                     {...provided.droppableProps}
                     ref={provided.innerRef}
                 >
@@ -123,7 +124,9 @@ const KanbanList: FC<kanbanInterface> = ({
                         </Modal>}
                     </div>
                     {provided.placeholder}
+
                 </div>
+
             )}
 
         </Droppable>

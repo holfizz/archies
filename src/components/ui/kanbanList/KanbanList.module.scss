@@ -1,6 +1,6 @@
 .kanbanColumn {
-  min-width: 300px;
-  height: -webkit-fill-available;
+  max-height: 550px;
+  height: auto;
   padding: 10px 20px;
   display: flex;
   width: auto;
@@ -81,4 +81,8 @@
     margin: 0 10px;
     font-size: 18px;
   }
+}
+
+.horizontal {
+  max-height: 550px;
 }

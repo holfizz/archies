@@ -110,9 +110,10 @@ const KanbanDesk: FC = () => {
             <div className={[cls.desk, typeBoard === 'board' ? cls.board : cls.list].join(' ')}>
                 <DragDropContext
                     onDragEnd={(result: DropResult) => handleOnDragEnd(result)}>
+
                     {columnsData.map((column: KanbanColumnProps, index: number) => {
                         return (
-                            <div>
+                            <>
                                 {typeBoard === 'board' ?
                                     <KanbanColumn
                                         className={column.className}
@@ -135,7 +136,7 @@ const KanbanDesk: FC = () => {
                                     >
                                     </KanbanList>
                                 }
-                            </div>
+                            </>
                         )
 
                     })}
