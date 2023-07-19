@@ -1,4 +1,4 @@
-import {FC, ReactNode, useState} from "react";
+import React, {FC, ReactNode, useState} from "react";
 import cls from './KanbanList.module.scss'
 import {BsPlus, BsThreeDotsVertical} from "react-icons/bs";
 import Button, {ButtonStyle} from "../button/Button";
@@ -7,25 +7,23 @@ import {useDispatch} from "react-redux";
 import Modal from "../modals/Modal";
 import Input, {InputStyle} from "../input/Input";
 import {Droppable} from "react-beautiful-dnd";
-import {addTask, deleteTask, TaskSliceProps} from "../../../store/reducers/taskSlice";
+import {addTask, deleteColumn, deleteTask, TaskSliceProps} from "../../../store/reducers/taskSlice";
 import {v4 as uuidv4} from 'uuid';
+import {GrFormClose} from "react-icons/gr";
+import DeleteModal from "../modals/DeleteModal";
 
-export enum kanbanColumnsVar {
-    TODO = 'todo',
-    PROGRESS = 'progress',
-    REVIEW = 'review',
-    DONE = 'done'
-}
 
 interface kanbanInterface {
     className?: string,
-    kanbanVar: kanbanColumnsVar,
+    kanbanVar: string,
     titleColumn: string,
     children?: ReactNode,
     statusColumn: string
     setTasksUpdate: any
     taskUpdate: any[],
-    index: number
+    index: number,
+    background: string,
+    id: string
 }
 
 const KanbanList: FC<kanbanInterface> = ({
@@ -36,11 +34,16 @@ const KanbanList: FC<kanbanInterface> = ({
                                              children,
                                              setTasksUpdate,
                                              taskUpdate,
-                                             index
+                                             index,
+                                             background,
+                                             id
                                          }) => {
     const [visible, setVisible] = useState<boolean>(false)
     const [title, setTitle] = useState<string>('')
     const [description, setDescription] = useState<string>('')
+    const [columnModal, setColumnModal] = useState<string | null>(null)
+    const [columnModalTwo, setColumnModalTwo] = useState<string | null>(null)
+
     const dispatch = useDispatch()
 
     const handleDescriptionChange = (value: string) => {
@@ -54,6 +57,10 @@ const KanbanList: FC<kanbanInterface> = ({
         setTasksUpdate((prevTasks: TaskSliceProps[]) =>
             prevTasks.filter((t: TaskSliceProps) => t.id !== task.id)
         );
+    };
+
+    const handleModalToggle = (index: string) => {
+        setColumnModal((prevIndex) => (prevIndex === index ? null : index));
     };
 
     function handleAddTask(title: string, description: string, statusColumn: string, taskUpdate: TaskSliceProps[]) {
@@ -88,14 +95,19 @@ const KanbanList: FC<kanbanInterface> = ({
                         <div className={cls.titleBlockKanban}>
                             <div className={cls.titleBlockNum}>
                                 <div className={cls.titleBlock}>
-                                    <div className={kanbanVar && cls[kanbanVar + 'Ellipse']}></div>
+                                    <div style={{background: background}} className={kanbanVar && cls.ellipse}></div>
                                     <h2 className={cls.kanbanTitle}>{titleColumn}</h2>
                                 </div>
                                 <div className={cls.ellipseNum}>
                                     <h1>{taskUpdate.length}</h1>
                                 </div>
                             </div>
-                            <BsThreeDotsVertical/>
+                            <div onClick={() => {
+                                handleModalToggle(index.toString())
+                                console.log(index.toString())
+                            }} className={cls.dotsController}>
+                                <BsThreeDotsVertical/>
+                            </div>
                         </div>
                         <Button onClick={() => {
                             setVisible(true)
@@ -124,7 +136,40 @@ const KanbanList: FC<kanbanInterface> = ({
                         </Modal>}
                     </div>
                     {provided.placeholder}
-
+                    {columnModal === index.toString() && (
+                        <div className={cls.modal}>
+                            <div className={cls.modalContent}>
+                                <div
+                                    className={cls.closeModal}
+                                    onClick={(e: any) => {
+                                        e.stopPropagation();
+                                        handleModalToggle(index.toString());
+                                    }}
+                                >
+                                    <GrFormClose/>
+                                </div>
+                                <div className={cls.modalBody}>
+                                    <Button
+                                        onClick={() => {
+                                            handleModalToggle(index.toString());
+                                            setColumnModalTwo(index.toString())
+                                        }}
+                                        buttonStyle={ButtonStyle.CLEAR}
+                                        className={cls.buttonDelete}
+                                    >
+                                        Delete
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    {columnModalTwo === index.toString() &&
+                        <DeleteModal setVisible={setColumnModalTwo} visible={columnModalTwo}>
+                            <h3>Do you really want to delete a column</h3>
+                            <Button onClick={() => dispatch(deleteColumn(id))}
+                                    buttonStyle={ButtonStyle.PRIMARY_LIGHT}>Delete</Button>
+                        </DeleteModal>
+                    }
                 </div>
 
             )}

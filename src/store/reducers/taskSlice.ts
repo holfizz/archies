@@ -29,6 +29,8 @@ export interface BoardSliceProps {
     id: string;
     name: string;
     items: TaskSliceProps[];
+    title: string,
+    bg: string
 }
 
 export interface TaskBoardState {
@@ -38,24 +40,33 @@ export interface TaskBoardState {
 const storedTaskState = localStorage.getItem('boards');
 const defaultTaskState: BoardSliceProps[] = [
     {
-        id: '1',
+        id: uuidv4(),
         name: 'todo',
         items: [],
+        title: 'To Do',
+        bg: '#FB8076'
     },
     {
-        id: '2',
+        id: uuidv4(),
         name: 'progress',
         items: [],
+        title: 'In Progress',
+        bg: '#365EFF'
     },
     {
-        id: '3',
+        id: uuidv4(),
         name: 'review',
         items: [],
+        title: 'Need Review',
+        bg: '#FBC047'
+
     },
     {
-        id: '4',
+        id: uuidv4(),
         name: 'done',
         items: [],
+        title: 'Done',
+        bg: "#0FB096"
     },
 ];
 const initialTaskState: TaskBoardState = storedTaskState
@@ -142,11 +153,35 @@ export const taskSlice = createSlice({
                     }
                 }
             }
+        },
+        addColumn: (state, action: PayloadAction<{ name: string; title: string; color: string }>) => {
+            const newColumn: BoardSliceProps = {
+                id: uuidv4(),
+                name: action.payload.name,
+                items: [],
+                title: action.payload.title,
+                bg: action.payload.color
+            };
+            state.boards.push(newColumn);
+            localStorage.setItem('boards', JSON.stringify(state.boards));
+        },
+        deleteColumn: (state, action: PayloadAction<string>) => {
+            state.boards = state.boards.filter(board => board.id !== action.payload);
+            localStorage.setItem('boards', JSON.stringify(state.boards));
         }
-
     },
+
 });
 
-export const {addTask, deleteTask, addSubtaskToList, deleteSubtaskFromList, setTasks, setSubtask} = taskSlice.actions;
+export const {
+    addTask,
+    deleteTask,
+    addSubtaskToList,
+    deleteSubtaskFromList,
+    setTasks,
+    setSubtask,
+    addColumn,
+    deleteColumn
+} = taskSlice.actions;
 
 export default taskSlice.reducer;

@@ -1,8 +1,8 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {ChangeEvent, FC, useEffect, useState} from "react";
 import cls from './KanbanDesk.module.scss'
 import HeaderKanbanDesk from "../haederKanbanDesk/HeaderKanbanDesk";
-import KanbanColumn, {kanbanColumnsVar} from "../ui/kanbanColumn/KanbanColumn";
-import {BoardSliceProps, setTasks, TaskSliceProps} from "../../store/reducers/taskSlice";
+import KanbanColumn from "../ui/kanbanColumn/KanbanColumn";
+import {addColumn, BoardSliceProps, setTasks, TaskSliceProps} from "../../store/reducers/taskSlice";
 import {DragDropContext, DropResult} from "react-beautiful-dnd";
 import {RootState} from "../../store/reducers";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
@@ -10,18 +10,24 @@ import {useDispatch} from "react-redux";
 import KanbanList from "../ui/kanbanList/KanbanList";
 import {PiListChecksBold} from "react-icons/pi";
 import {AiOutlineEye} from "react-icons/ai";
-import {BsChatSquareDots} from "react-icons/bs";
+import {BsChatSquareDots, BsPlus} from "react-icons/bs";
 import {FiPaperclip} from "react-icons/fi";
+import Button, {ButtonStyle} from "../ui/button/Button";
+import Modal from "../ui/modals/Modal";
+import Input, {InputStyle} from "../ui/input/Input";
 
-// import KanbanColumn, {kanbanColumnsVar} from "../ui/kanbanColumn/KanbanColumn";
 interface KanbanDeskProps {
     searchQuery: string
 }
 
 const KanbanDesk: FC<KanbanDeskProps> = ({searchQuery}) => {
     const boards = useTypedSelector((state: RootState) => state.boards.boards)
-    const [tasksUpdate, setTasksUpdate] = useState<BoardSliceProps[]>([]);
+    const [tasksUpdate, setTasksUpdate] = useState<BoardSliceProps[]>(boards);
     const [typeBoard, setTypeBoard] = useState<string>('');
+    const [visible, setVisible] = useState<boolean>(false);
+    const [columnName, setColumnName] = useState<string>('');
+    const [columnStatus, setColumnStatus] = useState<string>('');
+    const [color, setColor] = useState<string>('#000000');
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -31,40 +37,6 @@ const KanbanDesk: FC<KanbanDeskProps> = ({searchQuery}) => {
             setTasksUpdate(tasksArray);
         }
     }, [boards]);
-
-    interface KanbanColumnProps {
-        statusColumn: string;
-        titleColumn: string;
-        kanbanVar: kanbanColumnsVar;
-        className: string;
-    }
-
-    const columnsData: KanbanColumnProps[] = [
-        {
-            statusColumn: "todo",
-            titleColumn: "To Do",
-            kanbanVar: kanbanColumnsVar.TODO,
-            className: cls.toDoBlock
-        },
-        {
-            statusColumn: "progress",
-            titleColumn: "In Progress",
-            kanbanVar: kanbanColumnsVar.PROGRESS,
-            className: cls.inProgressBlock
-        },
-        {
-            statusColumn: "review",
-            titleColumn: "Need Review",
-            kanbanVar: kanbanColumnsVar.REVIEW,
-            className: cls.needReviewBlock
-        },
-        {
-            statusColumn: "done",
-            titleColumn: "Done",
-            kanbanVar: kanbanColumnsVar.DONE,
-            className: cls.doneBlock
-        }
-    ];
     const data = useTypedSelector(state => state.boards.boards)
     const [filteredColumns, setFilteredColumns] = useState(data);
     useEffect(() => {
@@ -118,6 +90,10 @@ const KanbanDesk: FC<KanbanDeskProps> = ({searchQuery}) => {
         setTasksUpdate(newTasks);
         dispatch(setTasks({boards: newTasks}));
     };
+    const handelAddColumn = () => {
+        dispatch(addColumn({name: columnStatus, title: columnName, color: color}))
+        setVisible(false)
+    }
     return (
         <div className={cls.kanbanDesk}>
             {searchQuery.length ?
@@ -177,28 +153,32 @@ const KanbanDesk: FC<KanbanDeskProps> = ({searchQuery}) => {
                         <DragDropContext
                             onDragEnd={(result: DropResult) => handleOnDragEnd(result)}>
 
-                            {columnsData.map((column: KanbanColumnProps, index: number) => {
+                            {tasksUpdate?.map((column: BoardSliceProps, index: number) => {
                                 return (
                                     <>
                                         {typeBoard === 'board' ?
                                             <KanbanColumn
-                                                className={column.className}
-                                                kanbanVar={column.kanbanVar}
-                                                titleColumn={column.titleColumn}
-                                                statusColumn={column.statusColumn}
+                                                className={cls[column.name + 'Block']}
+                                                kanbanVar={column.name}
+                                                titleColumn={column.title}
+                                                statusColumn={column.name}
                                                 setTasksUpdate={setTasksUpdate}
-                                                taskUpdate={tasksUpdate.find((board) => board.name === column.statusColumn)?.items || []}
+                                                taskUpdate={tasksUpdate.find((board) => board.name === column.name)?.items || []}
                                                 index={index}
+                                                background={column.bg}
+                                                id={column.id}
                                             >
                                             </KanbanColumn>
                                             : <KanbanList
-                                                className={column.className}
-                                                kanbanVar={column.kanbanVar}
-                                                titleColumn={column.titleColumn}
-                                                statusColumn={column.statusColumn}
+                                                className={cls[column.name + 'Block']}
+                                                kanbanVar={column.name}
+                                                titleColumn={column.title}
+                                                statusColumn={column.name}
                                                 setTasksUpdate={setTasksUpdate}
-                                                taskUpdate={tasksUpdate.find((board) => board.name === column.statusColumn)?.items || []}
+                                                taskUpdate={tasksUpdate.find((board) => board.name === column.name)?.items || []}
                                                 index={index}
+                                                background={column.bg}
+                                                id={column.id}
                                             >
                                             </KanbanList>
                                         }
@@ -206,9 +186,26 @@ const KanbanDesk: FC<KanbanDeskProps> = ({searchQuery}) => {
                                 )
 
                             })}
+                            <Button onClick={() => setVisible(!visible)} className={cls.addColumnButton}
+                                    buttonStyle={ButtonStyle.PRIMARY_LIGHT}><BsPlus/> Add Column</Button>
                         </DragDropContext>
                     </div>
                 </>}
+            {visible && <Modal visible={visible} setVisible={setVisible}>
+                <Input onChange={setColumnName} placeholder={'Column Name'} type={'string'}
+                       inputStyle={InputStyle.PRIMARY}
+                ></Input>
+                <Input onChange={setColumnStatus} placeholder={'Column Status'} type={'string'}
+                       inputStyle={InputStyle.PRIMARY} className={cls.inputModal}
+                ></Input>
+                <Button onClick={() => handelAddColumn()} className={cls.buttonModal}
+                        buttonStyle={ButtonStyle.PRIMARY_LIGHT}><BsPlus/> Add Column</Button>
+                <div className={cls.modalBlock}>
+                    <h2>Choose Color</h2>
+                    <input className={cls.chooseColor} type={'color'}
+                           onChange={(e: ChangeEvent<HTMLInputElement>) => setColor(e.target.value)}/>
+                </div>
+            </Modal>}
         </div>
     )
 }
