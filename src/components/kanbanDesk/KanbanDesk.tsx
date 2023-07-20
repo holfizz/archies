@@ -92,6 +92,9 @@ const KanbanDesk: FC<KanbanDeskProps> = ({searchQuery}) => {
     const handelAddColumn = () => {
         dispatch(addColumn({name: columnStatus, title: columnName, color: color}))
         setVisible(false)
+        setColor('#000000')
+        setColumnName('')
+        setColumnStatus('')
     }
     return (
         <div className={cls.kanbanDesk}>
@@ -182,13 +185,14 @@ const KanbanDesk: FC<KanbanDeskProps> = ({searchQuery}) => {
                 <Input onChange={setColumnStatus} placeholder={'Column Status'} type={'string'}
                        inputStyle={InputStyle.PRIMARY} className={cls.inputModal}
                 ></Input>
-                <Button onClick={() => handelAddColumn()} className={cls.buttonModal}
-                        buttonStyle={ButtonStyle.PRIMARY_LIGHT}><BsPlus/> Add Column</Button>
                 <div className={cls.modalBlock}>
                     <h2>Choose Color</h2>
                     <input className={cls.chooseColor} type={'color'}
                            onChange={(e: ChangeEvent<HTMLInputElement>) => setColor(e.target.value)}/>
                 </div>
+                <Button onClick={() => handelAddColumn()} className={cls.buttonModal}
+                        buttonStyle={ButtonStyle.PRIMARY_LIGHT}><BsPlus/> Add Column</Button>
+
             </Modal>}
         </div>
     )
