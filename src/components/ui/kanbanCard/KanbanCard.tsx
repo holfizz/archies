@@ -9,6 +9,9 @@ import Button, {ButtonStyle} from "../button/Button";
 import {Draggable} from "react-beautiful-dnd";
 import {TaskSliceProps} from "../../../store/reducers/taskSlice";
 import CardInfModal from "../modals/CardInfModal";
+import avatar_one from '../../../assets/avatars/avatar_one.png'
+import avatar_two from '../../../assets/avatars/avatar_two.png'
+import avatar_three from '../../../assets/avatars/avatar_three.png'
 
 interface KanbanCardProps {
     tasks: TaskSliceProps[];
@@ -44,7 +47,8 @@ const KanbanCard: FC<KanbanCardProps> = ({tasks, onDeleteTask, typeBoard}) => {
                                         ref={provided.innerRef}
                                     >
                                         <div className={cls.cardCategoryTitle}>
-                                            <div className={cls.category}>UX stages</div>
+                                            <div
+                                                className={[cls.category, cls[item.tag.replace(/\s+/g, '')]].join(' ')}>{item.tag}</div>
                                             <div
                                                 className={cls.deleteTask}
                                                 onClick={(e: any) => {
@@ -70,9 +74,15 @@ const KanbanCard: FC<KanbanCardProps> = ({tasks, onDeleteTask, typeBoard}) => {
                                         <div className={cls.line}></div>
                                         <div>
                                             <div className={cls.users}>
-                                                <div className={[cls.user, cls.user_one].join(" ")}></div>
-                                                <div className={[cls.user, cls.user_two].join(" ")}></div>
-                                                <div className={[cls.user, cls.user_three].join(" ")}></div>
+                                                <div className={[cls.user, cls.user_one].join(" ")}>
+                                                    <img width={32} src={avatar_one} alt={'user'}/>
+                                                </div>
+                                                <div className={[cls.user, cls.user_two].join(" ")}>
+                                                    <img width={60} src={avatar_two} alt={'user'}/>
+                                                </div>
+                                                <div className={[cls.user, cls.user_three].join(" ")}>
+                                                    <img width={45} src={avatar_three} alt={'user'}/>
+                                                </div>
                                             </div>
                                             <div className={cls.socialStats}>
                                                 <div className={cls.socialsButtonEye}>

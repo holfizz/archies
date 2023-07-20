@@ -24,15 +24,28 @@
 
 .category {
   width: 110px;
-  height: 30px;
+  height: 40px;
   border-radius: 30px;
-  color: #F2B96C;
-  background: rgba(245, 179, 52, 0.2);
   font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
+}
+
+.UXStages {
+  color: #F2B96C;
+  background: #F2B96C60;
+}
+
+.Design {
+  color: #6c49ec;
+  background: #6c49ec60;
+}
+
+.Branding {
+  color: #ea8783;
+  background: #ea878360;
 }
 
 .cardTitle {
@@ -119,23 +132,29 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #9d9d9d;
   border: 2px solid #fff;
   position: absolute;
   left: 0;
   margin: -10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.user_one {
+  background: #ab96ff;
 }
 
 .user_two {
   left: 30px;
+  background: #ffc297;
 }
 
 .user_three {
   left: 60px;
-}
+  background: #ea7171;
 
-.user_four {
-  left: 90px;
 }
 
 .socialStats {

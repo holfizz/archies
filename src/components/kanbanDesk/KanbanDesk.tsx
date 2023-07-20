@@ -1,13 +1,11 @@
 import React, {ChangeEvent, FC, useEffect, useState} from "react";
 import cls from './KanbanDesk.module.scss'
 import HeaderKanbanDesk from "../haederKanbanDesk/HeaderKanbanDesk";
-import KanbanColumn from "../ui/kanbanColumn/KanbanColumn";
 import {addColumn, BoardSliceProps, setTasks, TaskSliceProps} from "../../store/reducers/taskSlice";
 import {DragDropContext, DropResult} from "react-beautiful-dnd";
 import {RootState} from "../../store/reducers";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import {useDispatch} from "react-redux";
-import KanbanList from "../ui/kanbanList/KanbanList";
 import {PiListChecksBold} from "react-icons/pi";
 import {AiOutlineEye} from "react-icons/ai";
 import {BsChatSquareDots, BsPlus} from "react-icons/bs";
@@ -15,6 +13,7 @@ import {FiPaperclip} from "react-icons/fi";
 import Button, {ButtonStyle} from "../ui/button/Button";
 import Modal from "../ui/modals/Modal";
 import Input, {InputStyle} from "../ui/input/Input";
+import KanbanBoard from "../ui/kanbanBoard/KanbarBoard";
 
 interface KanbanDeskProps {
     searchQuery: string
@@ -156,32 +155,17 @@ const KanbanDesk: FC<KanbanDeskProps> = ({searchQuery}) => {
                             {tasksUpdate?.map((column: BoardSliceProps, index: number) => {
                                 return (
                                     <>
-                                        {typeBoard === 'board' ?
-                                            <KanbanColumn
-                                                className={cls[column.name + 'Block']}
-                                                kanbanVar={column.name}
-                                                titleColumn={column.title}
-                                                statusColumn={column.name}
-                                                setTasksUpdate={setTasksUpdate}
-                                                taskUpdate={tasksUpdate.find((board) => board.name === column.name)?.items || []}
-                                                index={index}
-                                                background={column.bg}
-                                                id={column.id}
-                                            >
-                                            </KanbanColumn>
-                                            : <KanbanList
-                                                className={cls[column.name + 'Block']}
-                                                kanbanVar={column.name}
-                                                titleColumn={column.title}
-                                                statusColumn={column.name}
-                                                setTasksUpdate={setTasksUpdate}
-                                                taskUpdate={tasksUpdate.find((board) => board.name === column.name)?.items || []}
-                                                index={index}
-                                                background={column.bg}
-                                                id={column.id}
-                                            >
-                                            </KanbanList>
-                                        }
+                                        <KanbanBoard
+                                            className={cls[column.name + 'Block']}
+                                            kanbanVar={column.name}
+                                            titleColumn={column.title}
+                                            statusColumn={column.name}
+                                            setTasksUpdate={setTasksUpdate}
+                                            taskUpdate={tasksUpdate.find((board) => board.name === column.name)?.items || []}
+                                            index={index}
+                                            background={column.bg}
+                                            id={column.id}
+                                            mode={typeBoard}/>
                                     </>
                                 )
 

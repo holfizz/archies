@@ -99,17 +99,12 @@ button {
 }
 
 .buttonLogout {
-  svg {
-    fill: #fff;
-  }
-
+  color: #000;
   transition: all .3s;
 }
 
 .buttonLogout:hover {
-  svg {
-    fill: #365EFF;
-  }
+  color: #224aee;
 
   transition: all .3s;
 }

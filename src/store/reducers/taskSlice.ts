@@ -18,7 +18,8 @@ export interface TaskSliceProps {
     description: string;
     status: string;
     order: number;
-    list: Subtask[];
+    list: Subtask[]
+    tag: string
 }
 
 export interface TaskState {

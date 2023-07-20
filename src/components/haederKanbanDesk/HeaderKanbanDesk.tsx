@@ -5,6 +5,9 @@ import Button, {ButtonStyle} from "../ui/button/Button";
 import {BsPlus} from "react-icons/bs";
 import {PiListChecksBold} from "react-icons/pi";
 import {GoColumns} from "react-icons/go";
+import avatar_one from "../../assets/avatars/avatar_one.png";
+import avatar_two from "../../assets/avatars/avatar_two.png";
+import avatar_three from "../../assets/avatars/avatar_three.png";
 
 interface HeaderKanbanDeskProps {
     lengthTasks: number
@@ -71,9 +74,15 @@ const HeaderKanbanDesk: FC<HeaderKanbanDeskProps> = ({lengthTasks, lengthDone, s
             <div className={cls.controller}>
                 <div className={cls.membersControllers}>
                     <div className={cls.users}>
-                        <div className={[cls.user, cls.user_one].join(' ')}></div>
-                        <div className={[cls.user, cls.user_two].join(' ')}></div>
-                        <div className={[cls.user, cls.user_three].join(' ')}></div>
+                        <div className={[cls.user, cls.user_one].join(" ")}>
+                            <img width={32} src={avatar_one} alt={'user'}/>
+                        </div>
+                        <div className={[cls.user, cls.user_two].join(" ")}>
+                            <img width={60} src={avatar_two} alt={'user'}/>
+                        </div>
+                        <div className={[cls.user, cls.user_three].join(" ")}>
+                            <img width={45} src={avatar_three} alt={'user'}/>
+                        </div>
                     </div>
                     <Button buttonStyle={ButtonStyle.PRIMARY_LIGHT}><BsPlus/>Add Member</Button>
 

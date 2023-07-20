@@ -28,7 +28,7 @@
   width: 60px;
   height: 60px;
   border-radius: 20px;
-  background: #d1e9fd;
+  background: #f6aaaa;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -130,18 +130,29 @@
   background: #9d9d9d;
   border: 2px solid #fff;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+
+.user_one {
+  left: -15px;
+  background: #ab96ff;
 }
 
 .user_two {
-  left: -15px;
+  left: -30px;
+  background: #ffc297;
+
 }
 
 .user_three {
-  left: -30px;
-}
-
-.user_four {
   left: -45px;
+  background: #ea7171;
+
+
 }
 
 .membersControllers {

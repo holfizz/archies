@@ -17,12 +17,17 @@
   flex-wrap: nowrap;
 
   svg {
-    stroke: #C8C7CB;
+    color: #C8C7CB;
     position: relative;
     left: 40px;
     font-weight: 800;
     transform: scale(1.5);
   }
+
+}
+
+.search:focus svg {
+  color: #365EFF;
 }
 
 .headerController {
@@ -37,8 +42,11 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: #e3e2e2;
+  background: #f19de8;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .profile {
@@ -49,10 +57,17 @@
   align-items: center;
 
   svg {
-    fill: #b7b7b7;
+    color: #b7b7b7;
     transform: scale(1.7);
     margin: 0 10px;
     cursor: pointer;
+    transition: all 0.4s;
+
+  }
+
+  svg:hover {
+    color: #365EFF;
+    transition: all 0.4s;
   }
 }
 
