@@ -3,13 +3,13 @@ import cls from './Modal.module.scss'
 
 interface ModalProps {
     children?: ReactNode,
-    visible: string | null | number,
+    visible: null | number,
     setVisible: Dispatch<SetStateAction<null | number>>
 }
 
 const DeleteModal: FC<ModalProps> = ({children, visible, setVisible}) => {
     const rootClasses = [cls.modal]
-    if (visible) {
+    if (Number(visible) > -1) {
         rootClasses.push(cls.active)
     }
     return (

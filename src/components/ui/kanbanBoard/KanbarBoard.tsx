@@ -128,10 +128,6 @@ const KanbanBoard: FC<kanbanInterface> = ({
                 height: '40px',
                 display: 'flex',
                 alignItems: 'center',
-                firstChild: (provided: any) => ({
-                    ...provided,
-                    margin: '30px'
-                }),
 
             }
         },
@@ -159,7 +155,6 @@ const KanbanBoard: FC<kanbanInterface> = ({
                             <div
                                 onClick={() => {
                                     handleModalToggle(index)
-                                    console.log(index.toString())
                                 }} className={cls.dotsController}>
                                 <BsThreeDotsVertical/>
                             </div>
@@ -233,7 +228,10 @@ const KanbanBoard: FC<kanbanInterface> = ({
                     {columnModalTwo === index &&
                         <DeleteModal setVisible={setColumnModalTwo} visible={columnModalTwo}>
                             <h3>Do you really want to delete a column</h3>
-                            <Button onClick={() => dispatch(deleteColumn(id))}
+                            <Button onClick={() => {
+                                dispatch(deleteColumn(id))
+                                setColumnModalTwo(null)
+                            }}
                                     buttonStyle={ButtonStyle.PRIMARY_LIGHT}>Delete</Button>
                         </DeleteModal>
                     }
