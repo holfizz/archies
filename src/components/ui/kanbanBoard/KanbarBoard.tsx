@@ -6,7 +6,7 @@ import KanbanCard from "../kanbanCard/KanbanCard";
 import {useDispatch} from "react-redux";
 import Modal from "../modals/Modal";
 import Input, {InputStyle} from "../input/Input";
-import {Droppable} from "react-beautiful-dnd";
+import {Droppable} from "@hello-pangea/dnd";
 import {addTask, deleteColumn, deleteTask, TaskSliceProps} from "../../../store/reducers/taskSlice";
 import {v4 as uuidv4} from 'uuid';
 import {GrFormClose} from "react-icons/gr";
@@ -134,111 +134,117 @@ const KanbanBoard: FC<kanbanInterface> = ({
     }
 
     return (
-        <Droppable droppableId={statusColumn} key={statusColumn}
-                   direction={mode === 'list' ? 'horizontal' : 'vertical'}>
-            {(provided) => (
-                <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                >
-                    <div className={[cls.kanbanColumn, className].join(' ')}>
-                        <div className={cls.titleBlockKanban}>
-                            <div className={cls.titleBlockNum}>
-                                <div className={cls.titleBlock}>
-                                    <div style={{background: background}} className={kanbanVar && cls.ellipse}></div>
-                                    <h2 className={cls.kanbanTitle}>{titleColumn}</h2>
-                                </div>
-                                <div onClick={() => setColumnModal(index)} className={cls.ellipseNum}>
-                                    <h1>{taskUpdate.length}</h1>
-                                </div>
-                            </div>
-                            <div
-                                onClick={() => {
-                                    handleModalToggle(index)
-                                }} className={cls.dotsController}>
-                                <BsThreeDotsVertical/>
-                            </div>
-                        </div>
-                        <Button onClick={() => {
-                            setVisible(true)
-                        }} buttonStyle={ButtonStyle.PRIMARY_DARK}><BsPlus/>Add New Task</Button>
-                        <div>{children}</div>
-                        <KanbanCard typeBoard={mode} tasks={taskUpdate}
-                                    onDeleteTask={handleDeleteTask}/>
-                        {visible &&
-                            <Modal visible={visible} setVisible={setVisible}>
-                                <Input className={cls.modalAddTask} onChange={handleTitleChange}
-                                       inputStyle={InputStyle.PRIMARY}
-                                       placeholder={'Title Task'}
-                                       type={'text'}></Input>
-                                <Input className={cls.modalAddTask} onChange={handleDescriptionChange}
-                                       inputStyle={InputStyle.PRIMARY}
-                                       placeholder={'Description Task'} type={'text'}></Input>
-                                <Select options={options} styles={stylesOptions}
-                                        onChange={(selectedOption: any) => {
-                                            setTag(selectedOption.label);
-                                        }}
-                                        placeholder={<div className={cls.placeholderText}>Select category</div>}
-                                />
-                                <Button className={cls.modalAddTask} buttonStyle={ButtonStyle.PRIMARY_LIGHT}
-                                        onClick={() => {
-                                            handleAddTask(title, description, statusColumn, taskUpdate)
-                                            setDescription('')
-                                            setTitle('')
-                                            setVisible(false)
-                                        }}
-                                >
-                                    <BsPlus/> Add New Task
-                                </Button>
-                            </Modal>}
+        <div className={[cls.column, className, mode === 'list' ? cls.horizontalColumn : cls.verticalColumn].join(' ')}>
+
+            <div className={cls.titleBlockKanban}>
+                <div className={cls.titleBlockNum}>
+                    <div className={cls.titleBlock}>
+                        <div style={{background: background}} className={kanbanVar && cls.ellipse}></div>
+                        <h2 className={cls.kanbanTitle}>{titleColumn}</h2>
                     </div>
-                    {provided.placeholder}
-                    {columnModal === index && (
-                        <div className={cls.modal}>
-                            <div className={cls.modalContent}>
-                                <div
-                                    className={cls.closeModal}
-                                    onClick={(e: any) => {
-                                        e.stopPropagation();
-                                        handleModalToggle(index);
-                                    }}
-                                >
-                                    <GrFormClose/>
-                                </div>
-                                <div className={cls.modalBody}>
-                                    {kanbanVar === 'done' ?
-                                        <button className={cls.deleteNotPossible}>
-                                            Deletion is not possible
-                                        </button> :
-                                        <Button
-                                            onClick={() => {
-                                                handleModalToggle(index);
-                                                setColumnModalTwo(index)
-                                            }}
-                                            buttonStyle={ButtonStyle.CLEAR}
-                                            className={cls.buttonDelete}
-                                        >
-                                            Delete
-                                        </Button>}
+                    <div onClick={() => setColumnModal(index)} className={cls.ellipseNum}>
+                        <h1>{taskUpdate.length}</h1>
+                    </div>
+                </div>
+                <div
+                    onClick={() => {
+                        handleModalToggle(index)
+                    }} className={cls.dotsController}>
+                    <BsThreeDotsVertical/>
+                </div>
+            </div>
 
+            <Button onClick={() => {
+                setVisible(true)
+            }} buttonStyle={ButtonStyle.PRIMARY_DARK}><BsPlus/>Add New Task</Button>
+            <div>{children}</div>
+            <Droppable droppableId={statusColumn} key={statusColumn}
+                       direction={mode === 'list' ? 'horizontal' : 'vertical'}>
+                {(provided) => (
+                    <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                    >
+                        <div
+                            className={[cls.kanbanColumn, className, mode === 'list' ? cls.horizontal : cls.vertical].join(' ')}>
+
+                            <KanbanCard typeBoard={mode} tasks={taskUpdate}
+                                        onDeleteTask={handleDeleteTask}/>
+                            {visible &&
+                                <Modal visible={visible} setVisible={setVisible}>
+                                    <Input className={cls.modalAddTask} onChange={handleTitleChange}
+                                           inputStyle={InputStyle.PRIMARY}
+                                           placeholder={'Title Task'}
+                                           type={'text'}></Input>
+                                    <Input className={cls.modalAddTask} onChange={handleDescriptionChange}
+                                           inputStyle={InputStyle.PRIMARY}
+                                           placeholder={'Description Task'} type={'text'}></Input>
+                                    <Select options={options} styles={stylesOptions}
+                                            onChange={(selectedOption: any) => {
+                                                setTag(selectedOption.label);
+                                            }}
+                                            placeholder={<div className={cls.placeholderText}>Select category</div>}
+                                    />
+                                    <Button className={cls.modalAddTask} buttonStyle={ButtonStyle.PRIMARY_LIGHT}
+                                            onClick={() => {
+                                                handleAddTask(title, description, statusColumn, taskUpdate)
+                                                setDescription('')
+                                                setTitle('')
+                                                setVisible(false)
+                                            }}
+                                    >
+                                        <BsPlus/> Add New Task
+                                    </Button>
+                                </Modal>}
+                        </div>
+                        {provided.placeholder}
+                        {columnModal === index && (
+                            <div className={cls.modal}>
+                                <div className={cls.modalContent}>
+                                    <div
+                                        className={cls.closeModal}
+                                        onClick={(e: any) => {
+                                            e.stopPropagation();
+                                            handleModalToggle(index);
+                                        }}
+                                    >
+                                        <GrFormClose/>
+                                    </div>
+                                    <div className={cls.modalBody}>
+                                        {kanbanVar === 'done' ?
+                                            <button className={cls.deleteNotPossible}>
+                                                Deletion is not possible
+                                            </button> :
+                                            <Button
+                                                onClick={() => {
+                                                    handleModalToggle(index);
+                                                    setColumnModalTwo(index)
+                                                }}
+                                                buttonStyle={ButtonStyle.CLEAR}
+                                                className={cls.buttonDelete}
+                                            >
+                                                Delete
+                                            </Button>}
+
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    )}
-                    {columnModalTwo === index &&
-                        <DeleteModal setVisible={setColumnModalTwo} visible={columnModalTwo}>
-                            <h3>Do you really want to delete a column</h3>
-                            <Button onClick={() => {
-                                dispatch(deleteColumn(id))
-                                setColumnModalTwo(null)
-                            }}
-                                    buttonStyle={ButtonStyle.PRIMARY_LIGHT}>Delete</Button>
-                        </DeleteModal>
-                    }
-                </div>
-            )}
+                        )}
+                        {columnModalTwo === index &&
+                            <DeleteModal setVisible={setColumnModalTwo} visible={columnModalTwo}>
+                                <h3>Do you really want to delete a column</h3>
+                                <Button onClick={() => {
+                                    dispatch(deleteColumn(id))
+                                    setColumnModalTwo(null)
+                                }}
+                                        buttonStyle={ButtonStyle.PRIMARY_LIGHT}>Delete</Button>
+                            </DeleteModal>
+                        }
+                    </div>
+                )}
 
-        </Droppable>
+            </Droppable>
+        </div>
     )
 }
 

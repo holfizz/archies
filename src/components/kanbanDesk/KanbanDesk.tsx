@@ -2,7 +2,7 @@ import React, {ChangeEvent, FC, useEffect, useState} from "react";
 import cls from './KanbanDesk.module.scss'
 import HeaderKanbanDesk from "../haederKanbanDesk/HeaderKanbanDesk";
 import {addColumn, BoardSliceProps, setTasks, TaskSliceProps} from "../../store/reducers/taskSlice";
-import {DragDropContext, DropResult} from "react-beautiful-dnd";
+import {DragDropContext, DropResult} from "@hello-pangea/dnd";
 import {RootState} from "../../store/reducers";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import {useDispatch} from "react-redux";

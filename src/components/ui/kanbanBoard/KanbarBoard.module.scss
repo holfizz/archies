@@ -1,11 +1,10 @@
 .kanbanColumn {
   max-height: 550px;
-  height: auto;
-  padding: 10px 20px;
   display: flex;
   width: auto;
   min-width: 300px;
   flex-direction: column;
+  height: 100%;
 }
 
 .ellipse {
@@ -59,9 +58,6 @@
   }
 }
 
-.horizontal {
-  max-height: 550px;
-}
 
 .dotsController {
   width: 30px;
@@ -116,4 +112,21 @@
   color: red;
   border: 1px solid red;
   padding: 3px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 10px 20px;
+
+}
+
+.vertical {
+  height: 500px;
+
+}
+
+.horizontalColumn {
+  height: 500px;
 }

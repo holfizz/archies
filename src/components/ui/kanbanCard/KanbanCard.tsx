@@ -6,7 +6,7 @@ import {AiOutlineEye} from "react-icons/ai";
 import {FiPaperclip} from "react-icons/fi";
 import {GrFormClose} from "react-icons/gr";
 import Button, {ButtonStyle} from "../button/Button";
-import {Draggable} from "react-beautiful-dnd";
+import {Draggable} from "@hello-pangea/dnd";
 import {TaskSliceProps} from "../../../store/reducers/taskSlice";
 import CardInfModal from "../modals/CardInfModal";
 import avatar_one from '../../../assets/avatars/avatar_one.png'
